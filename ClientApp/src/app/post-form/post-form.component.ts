@@ -13,18 +13,28 @@ export class PostFormComponent implements OnInit {
     private restService: RestService
   ) { }
 
-  private message: string;
+  public message: string;
 
-  private addPost = () => {
+  public addPost = (): void => {
+    if (!this.isPostValid()) {
+      return;
+    }
+
     const addPostParameters: AddPostParameters = {
       Message: this.message
     };
     this.restService.addPost(addPostParameters).subscribe(() => {
       this.postSubmitted.emit();
+      this.message = '';
     });
   }
 
-  ngOnInit() {
+  public isPostValid = (): boolean => {
+    if (this.message) { return true; }
+    return false;
+  }
+
+  ngOnInit(): void {
   }
 
 }

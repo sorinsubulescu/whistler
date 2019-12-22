@@ -10,7 +10,7 @@ export class AppComponent {
   @ViewChild(PostListComponent) postListComponent: PostListComponent;
   title = 'whister';
 
-  refreshPostList = () => {
+  refreshPostList = (): void => {
     this.postListComponent.refresh();
   }
 }

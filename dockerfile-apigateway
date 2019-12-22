@@ -1,0 +1,27 @@
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
+LABEL delete_after_build="true"
+WORKDIR /app
+
+COPY ./Web/ClientApp/src/assets/i18n/en.json ./Web/ClientApp/src/assets/i18n/en.json
+COPY ./Web/ClientApp/src/assets/i18n/jp.json ./Web/ClientApp/src/assets/i18n/jp.json
+COPY ./Backend ./Backend
+
+WORKDIR ./Backend/src/Gateway/opswat.mdcs.api.gateway
+
+RUN dotnet publish -c Release -o out
+
+WORKDIR /app/Backend/tests/
+
+CMD dotnet test opswat.mdcs.api.gateway.tests -l trx -r /reports && dotnet test opswat.mdcs.common.tests -l trx -r /reports
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0 AS runtime
+
+WORKDIR /app
+
+COPY --from=build ./app/Backend/src/Gateway/opswat.mdcs.api.gateway/out .
+
+#Install wait tool
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait /wait
+RUN chmod +x /wait
+
+CMD /wait && exec dotnet opswat.mdcs.api.gateway.dll

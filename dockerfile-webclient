@@ -1,0 +1,20 @@
+FROM opswatprivate/mdcloudservices_node-builder:master AS build
+
+WORKDIR /app
+
+ENV PATH /app/node_modules/.bin:$PATH
+
+COPY ./Web/ClientApp /app
+
+RUN ng lint --force=true
+RUN ng test --watch=false
+RUN ng build --outputPath=dist --prod=true
+
+FROM nginx:latest
+
+COPY --from=build /app/dist /usr/share/nginx/html
+COPY ./Utils/default.conf /etc/nginx/conf.d/default.conf
+EXPOSE 443 80
+
+ENTRYPOINT nginx -g "daemon off;"
+

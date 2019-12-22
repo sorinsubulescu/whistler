@@ -14,25 +14,25 @@ export class PostEntryComponent implements OnInit {
     private restService: RestService
   ) { }
 
-  likePost = () => {
+  likePost = (): void => {
     this.restService.likePost(this.post.Id).subscribe(
       () => this.postStatusChanged.emit()
       );
   }
 
-  dislikePost = () => {
+  dislikePost = (): void => {
     this.restService.dislikePost(this.post.Id).subscribe(
       () => this.postStatusChanged.emit()
     );
   }
 
-  deletePost = () => {
+  deletePost = (): void => {
     this.restService.deletePost(this.post.Id).subscribe(
       () => this.postStatusChanged.emit()
     );
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
 }

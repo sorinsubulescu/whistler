@@ -51,7 +51,8 @@
       "info",
       "time",
       "timeEnd",
-      "trace"
+      "trace",
+      "log"
     ],
     "no-construct": true,
     "no-debugger": true,
@@ -73,7 +74,6 @@
     "no-trailing-whitespace": true,
     "no-unnecessary-initializer": true,
     "no-unused-expression": true,
-    "no-use-before-declare": true,
     "no-var-keyword": true,
     "object-literal-sort-keys": false,
     "one-line": [
@@ -107,6 +107,16 @@
         "variable-declaration": "nospace"
       }
     ],
+    "typedef": [
+      true,
+      "call-signature",
+      "property-declaration",
+      "arrow-call-signature",
+      "parameter",
+      "arrow-parameter",
+      "object-destructuring",
+      "array-destructuring"
+    ],
     "unified-signatures": true,
     "variable-name": false,
     "whitespace": [
@@ -126,6 +136,7 @@
     "use-life-cycle-interface": true,
     "use-pipe-transform-interface": true,
     "component-class-suffix": true,
-    "directive-class-suffix": true
+    "directive-class-suffix": true,
+    "only-arrow-functions": true
   }
 }

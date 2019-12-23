@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Post } from './models/Post';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +15,11 @@ export class RestService {
     private httpClient: HttpClient
   ) { }
 
+  private baseUrl = environment.baseUrl;
+
   addPost(addPostParameters: AddPostParameters): Observable<Response> {
     return this.httpClient.post(
-      `http://localhost:5000/api/post`,
+      `${this.baseUrl}/api/post`,
       addPostParameters
     ).pipe(
       map((response: Response) => {
@@ -27,7 +30,7 @@ export class RestService {
 
   getPosts(): Observable<Array<Post>> {
     return this.httpClient.get(
-      `http://localhost:5000/api/post`
+      `${this.baseUrl}/api/post`
     ).pipe(
       map((postList: Array<Post>) => {
         return postList;
@@ -37,7 +40,7 @@ export class RestService {
 
   likePost(postId: string): Observable<Response> {
     return this.httpClient.put(
-      `http://localhost:5000/api/post/like/${postId}`,
+      `${this.baseUrl}/api/post/like/${postId}`,
       null
     ).pipe(
       map((response: Response) => {
@@ -48,7 +51,7 @@ export class RestService {
 
   dislikePost(postId: string): Observable<Response> {
     return this.httpClient.put(
-      `http://localhost:5000/api/post/dislike/${postId}`,
+      `${this.baseUrl}/api/post/dislike/${postId}`,
       null
     ).pipe(
       map((response: Response) => {
@@ -59,7 +62,7 @@ export class RestService {
 
   deletePost(postId: string): Observable<Response> {
     return this.httpClient.delete(
-      `http://localhost:5000/api/post/${postId}`
+      `${this.baseUrl}/api/post/${postId}`
     ).pipe(
       map((response: Response) => {
         return response;

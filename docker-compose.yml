@@ -1,0 +1,40 @@
+ version: '3'
+ services:
+  mongodb:
+     image: "mongo:3.6"
+     container_name: "whistler_mongodb"
+     volumes:
+       - whistler_db:/data/db
+     ports:
+       - ${MONGO_PORT}:27017
+
+  apigateway:
+    build:
+      context: .
+      dockerfile: "dockerfile-apigateway"
+    container_name: "whistler_apigateway"
+    depends_on:
+      - mongodb
+    restart: on-failure
+    environment:
+      - WAIT_HOSTS=mongodb:${MONGO_PORT}
+      - MONGO_URL=mongodb://mongodb:${MONGO_PORT}
+      - ASPNETCORE_URLS=http://+
+    ports:
+      - ${APIGATEWAY_PORT}:80
+      - ${APIGATEWAY_PORT_SSL}:443
+
+  webclient:
+    build:
+      context: .
+      dockerfile: "dockerfile-webclient"
+    container_name: "whistler_webclient"
+    depends_on:
+      - apigateway
+    restart: on-failure
+    ports:
+      - ${WEB_PORT}:80
+      - ${WEB_PORT_SSL}:443
+
+ volumes:
+   whistler_db:

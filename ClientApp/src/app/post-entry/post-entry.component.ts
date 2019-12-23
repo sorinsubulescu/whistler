@@ -15,19 +15,19 @@ export class PostEntryComponent implements OnInit {
   ) { }
 
   likePost = (): void => {
-    this.restService.likePost(this.post.Id).subscribe(
+    this.restService.likePost(this.post.id).subscribe(
       () => this.postStatusChanged.emit()
       );
   }
 
   dislikePost = (): void => {
-    this.restService.dislikePost(this.post.Id).subscribe(
+    this.restService.dislikePost(this.post.id).subscribe(
       () => this.postStatusChanged.emit()
     );
   }
 
   deletePost = (): void => {
-    this.restService.deletePost(this.post.Id).subscribe(
+    this.restService.deletePost(this.post.id).subscribe(
       () => this.postStatusChanged.emit()
     );
   }

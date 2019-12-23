@@ -21,7 +21,7 @@ export class PostFormComponent implements OnInit {
     }
 
     const addPostParameters: AddPostParameters = {
-      Message: this.message
+      message: this.message
     };
     this.restService.addPost(addPostParameters).subscribe(() => {
       this.postSubmitted.emit();

@@ -1,9 +1,9 @@
 <div class="post-container">
   <div class="delete-button"><span (click)="deletePost()">❌</span></div>
-  <div class="message">{{post.Message}}</div>
+  <div class="message">{{post.message}}</div>
   <div class="likes">
     <button type="button" class="btn btn-outline-success" (click)="likePost()">👍</button>
-    {{post.Likes}}
+    {{post.likes}}
     <button type="button" class="btn btn-outline-danger" (click)="dislikePost()">👎</button>
   </div>
 </div>

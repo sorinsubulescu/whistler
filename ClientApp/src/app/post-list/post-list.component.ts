@@ -21,7 +21,7 @@ export class PostListComponent implements OnInit {
     this.restService.getPosts().subscribe(
       (posts: Array<Post>) => {
         this.postList = posts;
-        this.postList.sort((a: Post, b: Post) => b.Likes - a.Likes);
+        this.postList.sort((a: Post, b: Post) => b.likes - a.likes);
       });
   }
 

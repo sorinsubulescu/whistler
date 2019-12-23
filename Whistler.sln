@@ -2,6 +2,19 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "apigateway", "apigateway\apigateway.csproj", "{33EC0EDB-49FC-4200-A22B-B723B03C0C9D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{3DAE4B6E-4393-432E-A38D-6C66EED2A694}"
+ProjectSection(SolutionItems) = preProject
+	dockerfile-apigateway = dockerfile-apigateway
+	dockerfile-webclient = dockerfile-webclient
+	docker-compose.yml = docker-compose.yml
+	.env = .env
+EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utils", "Utils", "{C617C621-B705-475B-BDC9-7213B16FDBB0}"
+ProjectSection(SolutionItems) = preProject
+	Utils\default.conf = Utils\default.conf
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

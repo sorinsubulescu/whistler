@@ -1,13 +1,14 @@
-FROM opswatprivate/mdcloudservices_node-builder:master AS build
+FROM node:latest AS build
 
 WORKDIR /app
 
-ENV PATH /app/node_modules/.bin:$PATH
+COPY ./ClientApp/package.json /app/package.json
+RUN npm install
+RUN npm install -g @angular/cli
 
-COPY ./Web/ClientApp /app
+COPY ./ClientApp /app
 
 RUN ng lint --force=true
-RUN ng test --watch=false
 RUN ng build --outputPath=dist --prod=true
 
 FROM nginx:latest

@@ -1,10 +1,12 @@
-using System;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
-namespace apigateway.Models
+namespace apigateway
 {
     public class Post
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; } = ObjectId.GenerateNewId().ToString();
         public string Message { get; set; }
 
         public int Likes { get; set; } = 0;

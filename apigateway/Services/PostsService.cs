@@ -1,59 +1,57 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using apigateway.Models;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace apigateway
 {
     public interface IPostsService
     {
-        void AddPost(Post post);
+        Task AddPost(Post post, CancellationToken cancellationToken = default);
 
-        IList<Post> ReadPosts();
+        Task<IEnumerable<Post>> ReadPosts(CancellationToken cancellationToken = default);
 
-        void LikePost(Guid postId);
+        Task LikePost(string postId, CancellationToken cancellationToken = default);
 
-        void DislikePost(Guid postId);
+        Task DislikePost(string postId, CancellationToken cancellationToken = default);
 
-        void DeletePost(Guid postId);
+        Task DeletePost(string postId, CancellationToken cancellationToken = default);
     }
 
     public class PostsService: IPostsService
     {
-        private readonly IList<Post> _posts = new List<Post>();
+        private readonly IPostProvider _postProvider;
 
-
-        public void AddPost(Post post)
+        public PostsService(IPostProvider postProvider)
         {
-            _posts.Add(post);
+            _postProvider = postProvider ?? throw new ArgumentNullException(nameof(postProvider));
         }
 
-        public IList<Post> ReadPosts()
+        public async Task AddPost(Post post, CancellationToken cancellationToken = default)
         {
-            return _posts;
+            await _postProvider.AddPost(post, cancellationToken).ConfigureAwait(false);
         }
 
-        public void LikePost(Guid postId)
+        public async Task<IEnumerable<Post>> ReadPosts(CancellationToken cancellationToken = default)
         {
-            var likedPost = _posts.Single(e => e.Id == postId);
-
-            likedPost.Likes++;
+            return await _postProvider.GetAll(cancellationToken).ConfigureAwait(false);
         }
 
-        public void DislikePost(Guid postId)
+        public async Task LikePost(string postId, CancellationToken cancellationToken = default)
         {
-            var dislikedPost = _posts.Single(e => e.Id == postId);
-
-            if (dislikedPost.Likes <= 0) return;
-
-            dislikedPost.Likes--;
+            await _postProvider.LikePost(postId, cancellationToken).ConfigureAwait(false);
         }
 
-        public void DeletePost(Guid postId)
+        public async Task DislikePost(string postId, CancellationToken cancellationToken = default)
         {
-            var postToRemove = _posts.Single(e => e.Id == postId);
+            await _postProvider.DislikePost(postId, cancellationToken).ConfigureAwait(false);
+        }
 
-            _posts.Remove(postToRemove);
+        public async Task DeletePost(string postId, CancellationToken cancellationToken = default)
+        {
+            await _postProvider.DeletePost(postId, cancellationToken).ConfigureAwait(false);
         }
     }
 }

@@ -1,3 +1,3 @@
 export class AddPostParameters {
-    Message: string;
+    message: string;
 }

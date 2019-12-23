@@ -7,7 +7,7 @@ import { Component, ViewChild } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  @ViewChild(PostListComponent) postListComponent: PostListComponent;
+  @ViewChild(PostListComponent, { static: true }) postListComponent: PostListComponent;
   title = 'whister';
 
   refreshPostList = (): void => {

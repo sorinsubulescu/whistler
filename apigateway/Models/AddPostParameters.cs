@@ -1,4 +1,4 @@
-namespace apigateway.Models
+namespace apigateway
 {
     public class AddPostParameters
     {

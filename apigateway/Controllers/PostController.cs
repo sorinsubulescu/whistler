@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using apigateway.Models;
+using System.Collections;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace apigateway.Controllers
+namespace apigateway
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -18,51 +19,47 @@ namespace apigateway.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IList<Post>> Get()
+        public async Task<ActionResult<IEnumerable>> Get(CancellationToken cancellationToken = default)
         {
-            return Ok(_postsService.ReadPosts());
+            var posts = await _postsService.ReadPosts(cancellationToken).ConfigureAwait(false);
+            return Ok(posts);
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] AddPostParameters addPostParameters)
+        public async Task<ActionResult> Post([FromBody] AddPostParameters addPostParameters,
+            CancellationToken cancellationToken = default)
         {
-            _postsService.AddPost(new Post
-            {
-                Message = addPostParameters.Message
-            });
+            await _postsService.AddPost(
+                new Post
+                {
+                    Message = addPostParameters.Message
+                },
+                cancellationToken).ConfigureAwait(false);
 
             return Ok();
         }
 
-        [HttpPut("like/{id}")]
-        public ActionResult LikePost(string id)
-        {
-            if (!Guid.TryParse(id, out var parsedGuid))
-                return BadRequest();
 
-            _postsService.LikePost(parsedGuid);
+        [HttpPut("like/{id}")]
+        public async Task<ActionResult> LikePost(string id, CancellationToken cancellationToken = default)
+        {
+            await _postsService.LikePost(id, cancellationToken).ConfigureAwait(false);
 
             return Ok();
         }
 
         [HttpPut("dislike/{id}")]
-        public ActionResult DislikePost(string id)
+        public async Task<ActionResult> DislikePost(string id, CancellationToken cancellationToken = default)
         {
-            if (!Guid.TryParse(id, out var parsedGuid))
-                return BadRequest();
-
-            _postsService.DislikePost(parsedGuid);
+            await _postsService.DislikePost(id, cancellationToken).ConfigureAwait(false);
 
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(string id)
+        public async Task<ActionResult> Delete(string id, CancellationToken cancellationToken = default)
         {
-            if (!Guid.TryParse(id, out var parsedGuid))
-                return BadRequest();
-
-            _postsService.DeletePost(parsedGuid);
+            await _postsService.DeletePost(id, cancellationToken).ConfigureAwait(false);
 
             return Ok();
         }

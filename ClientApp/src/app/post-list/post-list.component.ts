@@ -1,6 +1,7 @@
+import { GetPostsDto } from './../models/Post/GetPostsDto';
 import { RestService } from './../rest.service';
 import { Component, OnInit } from '@angular/core';
-import { Post } from '../models/Post';
+import { Post } from '../models/Post/Post';
 
 @Component({
   selector: 'app-post-list',
@@ -19,8 +20,9 @@ export class PostListComponent implements OnInit {
 
   fetchData = (): void => {
     this.restService.getPosts().subscribe(
-      (posts: Array<Post>) => {
-        this.postList = posts;
+      (getPostsDto: GetPostsDto) => {
+
+        this.postList = getPostsDto.posts;
         this.postList.sort((a: Post, b: Post) => b.likes - a.likes);
       });
   }

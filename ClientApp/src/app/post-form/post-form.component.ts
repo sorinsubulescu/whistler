@@ -1,4 +1,4 @@
-import { AddPostParameters } from './../models/AddPostParameters';
+import { AddPostParameters } from '../models/Post/AddPostParameters';
 import { RestService } from './../rest.service';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 

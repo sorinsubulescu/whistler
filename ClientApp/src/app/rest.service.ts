@@ -1,9 +1,10 @@
-import { AddPostParameters } from './models/AddPostParameters';
+import { GetPostsDto } from './models/Post/GetPostsDto';
+import { AddPostParameters } from './models/Post/AddPostParameters';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Post } from './models/Post';
+import { Post } from './models/Post/Post';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -28,11 +29,11 @@ export class RestService {
     );
   }
 
-  getPosts(): Observable<Array<Post>> {
+  getPosts(): Observable<GetPostsDto> {
     return this.httpClient.get(
       `${this.baseUrl}/api/post`
     ).pipe(
-      map((postList: Array<Post>) => {
+      map((postList: GetPostsDto) => {
         return postList;
       })
     );

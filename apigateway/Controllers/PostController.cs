@@ -2,26 +2,31 @@
 using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace apigateway
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PostController : ControllerBase
     {
 
-        private readonly IPostsService _postsService;
+        private readonly IQueryFactory _queryFactory;
+        private readonly ICommandFactory _commandFactory;
 
-        public PostController(IPostsService postsService)
+        public PostController(IQueryFactory queryFactory, ICommandFactory commandFactory)
         {
-            _postsService = postsService ?? throw new ArgumentNullException(nameof(postsService));
+            _queryFactory = queryFactory ?? throw new ArgumentNullException(nameof(queryFactory));
+            _commandFactory = commandFactory ?? throw new ArgumentNullException(nameof(commandFactory));
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable>> Get(CancellationToken cancellationToken = default)
         {
-            var posts = await _postsService.ReadPosts(cancellationToken).ConfigureAwait(false);
+            var posts = await _queryFactory.GetPostsQuery().Execute(cancellationToken).ConfigureAwait(false);
+
             return Ok(posts);
         }
 
@@ -29,37 +34,32 @@ namespace apigateway
         public async Task<ActionResult> Post([FromBody] AddPostParameters addPostParameters,
             CancellationToken cancellationToken = default)
         {
-            await _postsService.AddPost(
-                new Post
-                {
-                    Message = addPostParameters.Message
-                },
-                cancellationToken).ConfigureAwait(false);
+            await _commandFactory.AddPostCommand(addPostParameters).Execute(cancellationToken).ConfigureAwait(false);
 
             return Ok();
         }
 
 
-        [HttpPut("like/{id}")]
-        public async Task<ActionResult> LikePost(string id, CancellationToken cancellationToken = default)
+        [HttpPut("like/{postId}")]
+        public async Task<ActionResult> LikePost(string postId, CancellationToken cancellationToken = default)
         {
-            await _postsService.LikePost(id, cancellationToken).ConfigureAwait(false);
+            await _commandFactory.LikePostCommand(postId).Execute(cancellationToken).ConfigureAwait(false);
 
             return Ok();
         }
 
-        [HttpPut("dislike/{id}")]
-        public async Task<ActionResult> DislikePost(string id, CancellationToken cancellationToken = default)
+        [HttpPut("dislike/{postId}")]
+        public async Task<ActionResult> DislikePost(string postId, CancellationToken cancellationToken = default)
         {
-            await _postsService.DislikePost(id, cancellationToken).ConfigureAwait(false);
+            await _commandFactory.DislikePostCommand(postId).Execute(cancellationToken).ConfigureAwait(false);
 
             return Ok();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(string id, CancellationToken cancellationToken = default)
+        [HttpDelete("{postId}")]
+        public async Task<ActionResult> Delete(string postId, CancellationToken cancellationToken = default)
         {
-            await _postsService.DeletePost(id, cancellationToken).ConfigureAwait(false);
+            await _commandFactory.DeletePostCommand(postId).Execute(cancellationToken).ConfigureAwait(false);
 
             return Ok();
         }

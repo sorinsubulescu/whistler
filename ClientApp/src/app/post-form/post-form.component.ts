@@ -1,19 +1,26 @@
-import { AddPostParameters } from './../models/AddPostParameters';
-import { RestService } from './../rest.service';
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { AddPostParameters } from '../models/Post/AddPostParameters';
+import { RestPostService } from '../../core/data-access/post/rest-post.service';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+
+import * as autosize from 'autosize';
 
 @Component({
   selector: 'app-post-form',
   templateUrl: './post-form.component.html',
   styleUrls: ['./post-form.component.scss']
 })
-export class PostFormComponent implements OnInit {
-  @Output() postSubmitted: EventEmitter<any> = new EventEmitter();
+export class PostFormComponent implements OnInit, AfterViewInit {
   constructor(
-    private restService: RestService
+    private restService: RestPostService
   ) { }
+  @Output() postSubmitted: EventEmitter<any> = new EventEmitter();
+  @ViewChild('textarea', { static: true }) textarea: ElementRef;
 
   public message: string;
+
+  ngAfterViewInit(): void {
+    autosize(this.textarea.nativeElement);
+  }
 
   public addPost = (): void => {
     if (!this.isPostValid()) {

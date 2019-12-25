@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Post } from '../models/Post';
-import { RestService } from '../rest.service';
+import { RestPostService } from '../../core/data-access/post/rest-post.service';
+import { Post } from '../models/Post/Post';
 
 @Component({
   selector: 'app-post-entry',
@@ -11,7 +11,7 @@ export class PostEntryComponent implements OnInit {
   @Input() post: Post;
   @Output() postStatusChanged: EventEmitter<any> = new EventEmitter();
   constructor(
-    private restService: RestService
+    private restService: RestPostService
   ) { }
 
   likePost = (): void => {

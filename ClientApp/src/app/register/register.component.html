@@ -1,0 +1,47 @@
+<div class="register-container">
+  <div class="logo">Whistler</div>
+  <div class="form-container">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <div class="has-margin-bottom-50">
+          <h4 class="auth-form-heading">Getting Started</h4>
+          <a class="small-font has-color-primary has-no-underline" routerLink="/login">
+            Already have an account?
+          </a>
+        </div>
+
+        <div class="form-group has-margin-bottom-20" [ngClass]="{'invalid-group': !isFormGroupValid('fullName')}">
+          <label class="input-label">Full Name</label>
+          <input type="text" formControlName="fullName" class="form-control" placeholder="Full Name">
+          <div class="invalid-message">Invalid Full Name</div>
+        </div>
+
+        <div class="form-group has-margin-bottom-20" [ngClass]="{'invalid-group': !isFormGroupValid('userName')}">
+          <label class="input-label">Username</label>
+          <input type="text" formControlName="userName" class="form-control" placeholder="Username">
+          <div class="invalid-message">Invalid Username</div>
+        </div>
+
+        <div class="form-group has-margin-bottom-20" [ngClass]="{'invalid-group': !isFormGroupValid('email')}">
+          <label class="input-label">Email</label>
+          <input type="email" formControlName="email" class="form-control" placeholder="Email">
+          <div class="invalid-message">Invalid email</div>
+        </div>
+
+        <div class="form-group has-margin-bottom-20" [ngClass]="{'invalid-group': !isFormGroupValid('password')}">
+          <label class="input-label">Password</label>
+          <input type="password" formControlName="password" class="form-control" placeholder="Password">
+          <div class="invalid-message">Invalid password</div>
+        </div>
+
+        <div class="form-group has-margin-bottom-30"
+          [ngClass]="{'invalid-group': !isFormGroupValid('confirmPassword')}">
+          <label class="input-label">Confirm password</label>
+          <input type="password" formControlName="confirmPassword" class="form-control" placeholder="Confirm password">
+          <div class="invalid-message">Invalid confirm password</div>
+        </div>
+
+        <button class="register-btn" type="submit">Register</button>
+      </div>
+    </form>
+  </div>

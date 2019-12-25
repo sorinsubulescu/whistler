@@ -1,5 +1,5 @@
-import { PostListComponent } from './post-list/post-list.component';
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -7,10 +7,21 @@ import { Component, ViewChild } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  @ViewChild(PostListComponent, { static: true }) postListComponent: PostListComponent;
-  title = 'whister';
+  constructor(private router: Router) {}
 
-  refreshPostList = (): void => {
-    this.postListComponent.refresh();
-  }
+  public showNavbar = (): boolean => {
+    if (this.router.url.includes('login')) {
+        return false;
+    }
+
+    if (this.router.url.includes('register')) {
+        return false;
+    }
+
+    if (this.router.url === '/404') {
+        return false;
+    }
+
+    return true;
+}
 }

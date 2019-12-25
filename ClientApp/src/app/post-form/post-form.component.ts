@@ -1,5 +1,5 @@
 import { AddPostParameters } from '../models/Post/AddPostParameters';
-import { RestService } from './../rest.service';
+import { RestPostService } from '../../core/data-access/post/rest-post.service';
 import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
 import * as autosize from 'autosize';
@@ -10,17 +10,17 @@ import * as autosize from 'autosize';
   styleUrls: ['./post-form.component.scss']
 })
 export class PostFormComponent implements OnInit, AfterViewInit {
+  constructor(
+    private restService: RestPostService
+  ) { }
   @Output() postSubmitted: EventEmitter<any> = new EventEmitter();
   @ViewChild('textarea', { static: true }) textarea: ElementRef;
-  constructor(
-    private restService: RestService
-  ) { }
+
+  public message: string;
 
   ngAfterViewInit(): void {
     autosize(this.textarea.nativeElement);
   }
-
-  public message: string;
 
   public addPost = (): void => {
     if (!this.isPostValid()) {

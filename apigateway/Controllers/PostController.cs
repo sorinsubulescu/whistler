@@ -9,7 +9,7 @@ namespace apigateway
 {
     [Route("api/[controller]")]
     [ApiController]
-//    [Authorize]
+    [Authorize]
     public class PostController : ControllerBase
     {
 

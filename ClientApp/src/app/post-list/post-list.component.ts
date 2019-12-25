@@ -1,5 +1,5 @@
 import { GetPostsDto } from './../models/Post/GetPostsDto';
-import { RestService } from './../rest.service';
+import { RestPostService } from '../../core/data-access/post/rest-post.service';
 import { Component, OnInit } from '@angular/core';
 import { Post } from '../models/Post/Post';
 
@@ -10,7 +10,7 @@ import { Post } from '../models/Post/Post';
 })
 export class PostListComponent implements OnInit {
 
-  constructor(private restService: RestService) { }
+  constructor(private restPostService: RestPostService) { }
 
   public postList: Array<Post>;
 
@@ -19,7 +19,7 @@ export class PostListComponent implements OnInit {
   }
 
   fetchData = (): void => {
-    this.restService.getPosts().subscribe(
+    this.restPostService.getPosts().subscribe(
       (getPostsDto: GetPostsDto) => {
 
         this.postList = getPostsDto.posts;

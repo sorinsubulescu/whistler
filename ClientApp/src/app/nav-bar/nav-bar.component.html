@@ -3,6 +3,17 @@
     <div class="col logo">
       Whistler
     </div>
-    <div class="col-lg-2"></div>
+    <div class="col-lg-2">
+      <div class="dropdown user-dropdown">
+        <div class="top-bar-icon-bg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="far fa-user-circle"></i>
+        </div>
+        <div class="dropdown-menu profile-menu-dropdown" aria-labelledby="dropdownMenuButton">
+          <p class="profile-name">{{this.authenticationService.fullName}}</p>
+          <p class="profile-email">{{this.authenticationService.userEmail}}</p>
+          <div class="dropdown-item" (click)="logout()">Log Out</div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

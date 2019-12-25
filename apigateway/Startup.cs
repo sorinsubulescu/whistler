@@ -31,6 +31,9 @@ namespace apigateway
 
             services.AddSingleton<IDatabase, MongoDatabase>();
             services.AddSingleton<IPostProvider, PostProvider>();
+            services.AddSingleton<IUserProvider, UserProvider>();
+            services.AddSingleton<IRefreshTokenProvider, RefreshTokenProvider>();
+            services.AddSingleton<IAuthTokenHelper, AuthTokenHelper>();
             services.AddSingleton<IQueryFactory, QueryFactory>();
             services.AddSingleton<ICommandFactory, CommandFactory>();
 

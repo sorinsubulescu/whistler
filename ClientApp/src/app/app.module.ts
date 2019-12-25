@@ -9,13 +9,17 @@ import { HttpClientModule } from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import { PostListComponent } from './post-list/post-list.component';
 import { PostEntryComponent } from './post-entry/post-entry.component';
+import { HomeComponent } from './home/home.component';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
 
 @NgModule({
    declarations: [
       AppComponent,
       PostFormComponent,
       PostListComponent,
-      PostEntryComponent
+      PostEntryComponent,
+      HomeComponent,
+      NavBarComponent
    ],
    imports: [
       BrowserModule,

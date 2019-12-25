@@ -5,7 +5,7 @@ using MongoDB.Driver;
 
 namespace apigateway
 {
-    public class UserProvider
+    public class UserProvider : IUserProvider
     {
          private readonly IDatabase _database;
 

@@ -1,9 +1,8 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div class="title">
-  <h1>
-    Whistler
-  </h1>
+<div class="main-container">
+  <div class="app-navbar">
+    <app-nav-bar></app-nav-bar>
+  </div>
+  <div class="app-content">
+    <router-outlet></router-outlet>
+  </div>
 </div>
-<app-post-form (postSubmitted)="refreshPostList()"></app-post-form>
-<app-post-list></app-post-list>
-<router-outlet></router-outlet>

@@ -18,8 +18,8 @@ namespace apigateway
             _authTokenHelper = authTokenHelper ?? throw new ArgumentNullException(nameof(authTokenHelper));
         }
 
-        public IAddPostCommand AddPostCommand(AddPostParameters addPostParameters) =>
-            new AddPostCommand(addPostParameters, _postProvider);
+        public IAddPostCommand AddPostCommand(AddPostParameters addPostParameters, string userId) =>
+            new AddPostCommand(addPostParameters, userId, _postProvider);
 
         public ILikePostCommand LikePostCommand(string postId) => new LikePostCommand(postId, _postProvider);
 

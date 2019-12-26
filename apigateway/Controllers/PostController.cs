@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -34,7 +35,9 @@ namespace apigateway
         public async Task<ActionResult> Post([FromBody] AddPostParameters addPostParameters,
             CancellationToken cancellationToken = default)
         {
-            await _commandFactory.AddPostCommand(addPostParameters).Execute(cancellationToken).ConfigureAwait(false);
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            await _commandFactory.AddPostCommand(addPostParameters, userId).Execute(cancellationToken).ConfigureAwait(false);
 
             return Ok();
         }

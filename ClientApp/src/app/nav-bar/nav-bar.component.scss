@@ -11,12 +11,15 @@
 
 .navbar-row {
     height: 60px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .logo {
     color: white;
     padding-top: 16px;
-    padding-left: 50px;
+    padding-left: 30px;
     font-size: 18px;
     font-weight: 700;
 }

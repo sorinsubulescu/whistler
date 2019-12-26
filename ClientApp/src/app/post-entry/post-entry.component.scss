@@ -9,8 +9,8 @@
 }
 
 .message {
-    font-size: 1.5rem;
     color: white;
+    margin-left: 60px;
 }
 
 .delete-button {
@@ -40,5 +40,23 @@
 }
 
 .like-count {
+    color: white;
+}
+
+.owner-name {
+    color: white;
+    vertical-align: top;
+    font-weight: 700;
+}
+
+.name-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.user-avatar {
+    font-size: 40px;
+    margin-right: 20px;
     color: white;
 }

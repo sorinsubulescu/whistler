@@ -1,3 +1,4 @@
+using System;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -11,5 +12,9 @@ namespace apigateway
         public string Message { get; set; }
 
         public int Likes { get; set; } = 0;
+
+        public string OwnerId { get; set; }
+
+        public DateTime DateCreated { get; set; }
     }
 }

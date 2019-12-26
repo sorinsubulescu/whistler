@@ -1,6 +1,6 @@
-import { Post } from './Post';
 import { RestResponse } from '../Misc/RestResponse';
+import { PostDto } from './PostDto';
 
 export class GetPostsDto extends RestResponse {
-    posts: Array<Post>;
+    posts: Array<PostDto>;
 }

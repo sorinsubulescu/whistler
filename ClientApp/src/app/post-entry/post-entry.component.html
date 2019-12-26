@@ -1,9 +1,12 @@
 <div class="post-container">
+  <div class="name-row">
+  <div><i class="user-avatar far fa-user-circle"></i><span class="owner-name">{{post.owner.name}}</span></div>
   <div class="delete-button"><span (click)="deletePost()">❌</span></div>
+  </div>
   <div class="message">{{post.message}}</div>
   <div class="likes">
     <button type="button" class="btn btn-success" (click)="likePost()">👍</button>
-    <span class="like-count">{{post.likes}}</span>
+    <span class="like-count">{{post.likeCount}}</span>
     <button type="button" class="btn btn-danger" (click)="dislikePost()">👎</button>
   </div>
 </div>

@@ -2,7 +2,7 @@ namespace apigateway
 {
     public interface ICommandFactory
     {
-        IAddPostCommand AddPostCommand(AddPostParameters addPostParameters);
+        IAddPostCommand AddPostCommand(AddPostParameters addPostParameters, string userId);
 
         ILikePostCommand LikePostCommand(string postId);
 

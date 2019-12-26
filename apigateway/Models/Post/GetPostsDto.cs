@@ -4,6 +4,6 @@ namespace apigateway
 {
     public class GetPostsDto
     {
-        public IEnumerable<Post> Posts;
+        public IEnumerable<PostDto> Posts;
     }
 }

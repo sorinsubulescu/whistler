@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { RestPostService } from '../../core/data-access/post/rest-post.service';
-import { Post } from '../models/Post/Post';
+import { PostDto } from '../models/Post/PostDto';
 
 @Component({
   selector: 'app-post-entry',
@@ -8,7 +8,7 @@ import { Post } from '../models/Post/Post';
   styleUrls: ['./post-entry.component.scss']
 })
 export class PostEntryComponent implements OnInit {
-  @Input() post: Post;
+  @Input() post: PostDto;
   @Output() postStatusChanged: EventEmitter<any> = new EventEmitter();
   constructor(
     private restService: RestPostService

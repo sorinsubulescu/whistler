@@ -62,8 +62,13 @@ namespace apigateway
 
             return new AuthenticateUserDto
             {
-                FullName = user.FullName,
-                Email = user.Email,
+                CurrentUser = new UserDto
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    FullName = user.FullName,
+                    ProfilePictureFileName = user.ProfilePictureFileName
+                },
                 Result = AuthenticateUserDto.ResultType.Success,
                 ResponseKey = UiLocalizationKey.Success,
                 ResponseMessage = UiLocalizationMessage.SuccessfulRequest,

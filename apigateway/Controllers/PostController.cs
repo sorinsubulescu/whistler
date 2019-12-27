@@ -23,10 +23,29 @@ namespace apigateway
             _commandFactory = commandFactory ?? throw new ArgumentNullException(nameof(commandFactory));
         }
 
+        [HttpGet("{postId}")]
+        public async Task<ActionResult<PostDto>> GetPostById(string postId,
+            CancellationToken cancellationToken = default)
+        {
+            var post = await _queryFactory.GetPostByIdQuery(postId).Execute(cancellationToken).ConfigureAwait(false);
+
+            return Ok(post);
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable>> Get(CancellationToken cancellationToken = default)
         {
             var posts = await _queryFactory.GetPostsQuery().Execute(cancellationToken).ConfigureAwait(false);
+
+            return Ok(posts);
+        }
+
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<GetPostsDto>> GetPostsByUserId(string userId,
+            CancellationToken cancellationToken = default)
+        {
+            var posts = await _queryFactory.GetPostsByUserIdQuery(userId).Execute(cancellationToken)
+                .ConfigureAwait(false);
 
             return Ok(posts);
         }

@@ -35,7 +35,10 @@ namespace apigateway
                     LikeCount = post.Likes,
                     Owner = new UserDto
                     {
-                        Name = user.FullName
+                        Id = user.Id,
+                        FullName = user.FullName,
+                        Email = user.Email,
+                        ProfilePictureFileName = user.ProfilePictureFileName
                     }
                 });
             }

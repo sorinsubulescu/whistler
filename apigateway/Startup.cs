@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -34,6 +36,7 @@ namespace apigateway
             services.AddSingleton<IUserProvider, UserProvider>();
             services.AddSingleton<IRefreshTokenProvider, RefreshTokenProvider>();
             services.AddSingleton<IAuthTokenHelper, AuthTokenHelper>();
+            services.AddSingleton<IImageWriter, ImageWriter>();
             services.AddSingleton<IQueryFactory, QueryFactory>();
             services.AddSingleton<ICommandFactory, CommandFactory>();
 
@@ -63,6 +66,14 @@ namespace apigateway
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"));
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+                RequestPath = "/whstore"
+            });
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());
         }

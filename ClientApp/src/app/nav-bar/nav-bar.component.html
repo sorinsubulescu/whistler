@@ -3,14 +3,17 @@
     <div class="logo">
       Whistler
     </div>
-    <div class="">
+    <div class="navbar-row">
+      <div class="home-button"><span routerLink="/home">Home</span></div>
       <div class="dropdown user-dropdown">
         <div class="top-bar-icon-bg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="far fa-user-circle"></i>
+          <i class="far fa-user-circle profile-picture" *ngIf="!authenticationService.currentUser.profilePictureFileName"></i>
+          <img class="profile-picture" *ngIf="authenticationService.currentUser.profilePictureFileName" src="{{getProfilePictureLink()}}">
         </div>
         <div class="dropdown-menu profile-menu-dropdown" aria-labelledby="dropdownMenuButton">
-          <p class="profile-name">{{this.authenticationService.fullName}}</p>
-          <p class="profile-email">{{this.authenticationService.userEmail}}</p>
+          <p class="profile-name">{{this.authenticationService.currentUser.fullName}}</p>
+          <p class="profile-email">{{this.authenticationService.currentUser.email}}</p>
+          <div class="dropdown-item" routerLink="/profile/me">Profile</div>
           <div class="dropdown-item" (click)="logout()">Log Out</div>
         </div>
       </div>

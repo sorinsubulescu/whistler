@@ -1,7 +1,9 @@
 using System;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace apigateway
@@ -12,10 +14,12 @@ namespace apigateway
     public sealed class UserController : ControllerBase
     {
         private readonly ICommandFactory _commandFactory;
+        private readonly IQueryFactory _queryFactory;
 
-        public UserController(ICommandFactory commandFactory)
+        public UserController(ICommandFactory commandFactory, IQueryFactory queryFactory)
         {
             _commandFactory = commandFactory ?? throw new ArgumentNullException(nameof(commandFactory));
+            _queryFactory = queryFactory ?? throw new ArgumentNullException(nameof(queryFactory));
         }
 
         [HttpPost("register")]
@@ -106,6 +110,35 @@ namespace apigateway
                 BadRequest(result);
 
             return Ok(result);
+        }
+
+        [HttpGet("me")]
+        public async Task<ActionResult<UserDto>> GetCurrentUser(CancellationToken cancellationToken = default)
+        {
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var userDto = await _queryFactory.GetCurrentUserQuery(userId).Execute(cancellationToken)
+                .ConfigureAwait(false);
+
+            return Ok(userDto);
+        }
+
+        [HttpPut("profile_picture")]
+        public async Task<ActionResult> EditProfilePicture(IFormFile file, CancellationToken cancellationToken = default)
+        {
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var result = await _commandFactory.EditProfilePictureCommand(file, userId).Execute(cancellationToken).ConfigureAwait(false);
+
+            switch (result.Result)
+            {
+                case RestResponse.ResultType.Success:
+                    return Ok();
+                case RestResponse.ResultType.Error:
+                    return BadRequest();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

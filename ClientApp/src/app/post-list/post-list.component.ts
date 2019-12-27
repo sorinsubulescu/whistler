@@ -1,7 +1,6 @@
 import { GetPostsDto } from './../models/Post/GetPostsDto';
 import { RestPostService } from '../../core/data-access/post/rest-post.service';
-import { Component, OnInit } from '@angular/core';
-import { Post } from '../models/Post/Post';
+import { Component, OnInit, Input } from '@angular/core';
 import { PostDto } from '../models/Post/PostDto';
 
 @Component({
@@ -9,25 +8,13 @@ import { PostDto } from '../models/Post/PostDto';
   templateUrl: './post-list.component.html',
   styleUrls: ['./post-list.component.scss']
 })
-export class PostListComponent implements OnInit {
-
+export class PostListComponent{
+  @Input() postList: Array<PostDto>;
   constructor(private restPostService: RestPostService) { }
 
-  public postList: Array<PostDto>;
-
-  ngOnInit(): void {
-    this.fetchData();
+  public removePostFromList = (post: PostDto): void => {
+    const index = this.postList.indexOf(post);
+    this.postList.splice(index, 1);
   }
-
-  fetchData = (): void => {
-    this.restPostService.getPosts().subscribe(
-      (getPostsDto: GetPostsDto) => {
-
-        this.postList = getPostsDto.posts;
-      });
-  }
-
-  refresh = (): void =>
-    this.fetchData()
 
 }

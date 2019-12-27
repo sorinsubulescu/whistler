@@ -46,8 +46,7 @@ export class LoginComponent implements OnInit {
     this.restUserService.authenticateUser(this.loginForm.value)
         .subscribe({
             next: (response: AuthenticateUserDto): void => {
-                this.authenticationService.fullName = response.fullName;
-                this.authenticationService.userEmail = response.email;
+                this.authenticationService.currentUser = response.currentUser;
                 this.authenticationService.accessToken = response.token;
                 this.authenticationService.refreshToken = response.refreshToken;
 

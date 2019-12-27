@@ -3,6 +3,7 @@ import { LogoutUserParameters } from './../models/User/LogoutUserParameters';
 import { Component } from '@angular/core';
 import { AuthenticationService } from 'src/core/authentication/services/authentication.service';
 import { RestUserService } from 'src/core/data-access/user/rest-user.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-nav-bar',
@@ -35,5 +36,10 @@ export class NavBarComponent {
           this.router.navigate(['/login']);
         }
       });
+  }
+
+  public getProfilePictureLink = (): string => {
+    const baseUrl = environment.baseUrl;
+    return `${baseUrl}/whstore/profile/${this.authenticationService.currentUser.profilePictureFileName}`;
   }
 }

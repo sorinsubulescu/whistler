@@ -1,4 +1,5 @@
 using System;
+using Microsoft.AspNetCore.Http;
 
 namespace apigateway
 {
@@ -8,14 +9,16 @@ namespace apigateway
         private readonly IUserProvider _userProvider;
         private readonly IRefreshTokenProvider _tokenProvider;
         private readonly IAuthTokenHelper _authTokenHelper;
+        private readonly IImageWriter _imageWriter;
 
         public CommandFactory(IPostProvider postProvider, IUserProvider userProvider,
-            IRefreshTokenProvider tokenProvider, IAuthTokenHelper authTokenHelper)
+            IRefreshTokenProvider tokenProvider, IAuthTokenHelper authTokenHelper, IImageWriter imageWriter)
         {
             _postProvider = postProvider ?? throw new ArgumentNullException(nameof(postProvider));
             _userProvider = userProvider ?? throw new ArgumentNullException(nameof(userProvider));
             _tokenProvider = tokenProvider ?? throw new ArgumentNullException(nameof(tokenProvider));
             _authTokenHelper = authTokenHelper ?? throw new ArgumentNullException(nameof(authTokenHelper));
+            _imageWriter = imageWriter ?? throw new ArgumentNullException(nameof(imageWriter));
         }
 
         public IAddPostCommand AddPostCommand(AddPostParameters addPostParameters, string userId) =>
@@ -42,5 +45,7 @@ namespace apigateway
         public ILogoutUserCommand LogoutUserCommand(
             LogoutUserParameters logoutUserParameters)
             => new LogoutUserCommand(_userProvider, _tokenProvider, logoutUserParameters, _authTokenHelper);
+
+        public IEditProfilePictureCommand EditProfilePictureCommand(IFormFile file, string userId) => new EditProfilePictureCommand(file, userId, _imageWriter, _userProvider);
     }
 }

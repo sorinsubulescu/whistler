@@ -1,3 +1,4 @@
+import { PostDto } from './../../../app/models/Post/PostDto';
 import { GetPostsDto } from './../../../app/models/Post/GetPostsDto';
 import { AddPostParameters } from '../../../app/models/Post/AddPostParameters';
 import { Injectable } from '@angular/core';
@@ -25,9 +26,19 @@ export class RestPostService extends RestClient {
         addPostParameters
       ))
 
+  getPostById = (postId: string): Observable<PostDto> =>
+    this.callEndpoint<PostDto>(() =>
+      this.get(`api/post/${postId}`)
+    )
+
   getPosts = (): Observable<GetPostsDto> =>
     this.callEndpoint<GetPostsDto>(() =>
       this.get(`api/post`)
+    )
+
+  getPostsByUserId = (userId: string): Observable<GetPostsDto> =>
+    this.callEndpoint<GetPostsDto>(() =>
+      this.get(`api/post/user/${userId}`)
     )
 
   likePost = (postId: string): Observable<Response> =>

@@ -1,0 +1,9 @@
+<div class="header-container">
+  <div class="profile-picture-container" (mouseenter)="showUpdatePictureInfo=true" (mouseleave)="showUpdatePictureInfo=false" (click)="uploadProfilePicture()">
+    <i class="far fa-user-circle profile-picture" *ngIf="!authenticationService.currentUser.profilePictureFileName"></i>
+    <img class="profile-picture" *ngIf="authenticationService.currentUser.profilePictureFileName" src="{{getProfilePictureLink()}}">
+    <div class="update-picture-info" *ngIf="showUpdatePictureInfo">Edit</div>
+    <input type="file" #file style="display: none" accept="image/*" (change)="profilePictureFileSelectionChanged($event)"/>
+  </div>
+  <div class="name">{{authenticationService.currentUser.fullName}}</div>
+</div>

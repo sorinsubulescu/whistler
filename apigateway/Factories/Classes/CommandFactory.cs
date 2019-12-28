@@ -46,6 +46,10 @@ namespace apigateway
             LogoutUserParameters logoutUserParameters)
             => new LogoutUserCommand(_userProvider, _tokenProvider, logoutUserParameters, _authTokenHelper);
 
-        public IEditProfilePictureCommand EditProfilePictureCommand(IFormFile file, string userId) => new EditProfilePictureCommand(file, userId, _imageWriter, _userProvider);
+        public IEditProfilePictureCommand EditProfilePictureCommand(IFormFile file, string userId) =>
+            new EditProfilePictureCommand(file, userId, _imageWriter, _userProvider);
+
+        public IEditUserCommand EditUserCommand(EditUserParameters editUserParameters, string userId) =>
+            new EditUserCommand(editUserParameters, userId, _userProvider);
     }
 }

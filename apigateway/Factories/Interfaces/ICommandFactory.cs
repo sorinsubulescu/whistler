@@ -21,5 +21,7 @@ namespace apigateway
         ILogoutUserCommand LogoutUserCommand(LogoutUserParameters logoutUserParameters);
 
         IEditProfilePictureCommand EditProfilePictureCommand(IFormFile file, string userId);
+
+        IEditUserCommand EditUserCommand(EditUserParameters editUserParameters, string userId);
     }
 }

@@ -140,5 +140,25 @@ namespace apigateway
                     throw new ArgumentOutOfRangeException();
             }
         }
+
+        [HttpPatch]
+        public async Task<ActionResult> EditUser(EditUserParameters editUserParameters,
+            CancellationToken cancellationToken = default)
+        {
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var result = await _commandFactory.EditUserCommand(editUserParameters, userId).Execute(cancellationToken)
+                .ConfigureAwait(false);
+
+            switch (result.Result)
+            {
+                case RestResponse.ResultType.Success:
+                    return Ok();
+                case RestResponse.ResultType.Error:
+                    return BadRequest();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
     }
 }

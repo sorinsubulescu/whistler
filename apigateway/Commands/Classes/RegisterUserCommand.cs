@@ -20,18 +20,6 @@ namespace apigateway
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var userCount = await _userProvider.CountAll(cancellationToken).ConfigureAwait(false);
-
-            if (userCount > 0)
-            {
-                return new RegisterUserDto
-                {
-                    Result = RegisterUserDto.ResultType.FailedCanNotCreateUser,
-                    ResponseKey = UiLocalizationKey.RegisterFailedCannotCreateUser,
-                    ResponseMessage = UiLocalizationMessage.RegisterFailedCannotCreateUser
-                };
-            }
-
             var user = CreateUser();
 
             if (await IsUserNameUsed(user, cancellationToken)

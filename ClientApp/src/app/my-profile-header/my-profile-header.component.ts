@@ -1,3 +1,4 @@
+import { EditUserParameters } from './../models/User/EditUserParameters';
 import { AuthenticationService } from 'src/core/authentication/services/authentication.service';
 import { Component, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { RestUserService } from 'src/core/data-access/user/rest-user.service';
@@ -18,6 +19,8 @@ export class MyProfileHeaderComponent {
     ) { }
 
   public showUpdatePictureInfo = false;
+  public showUpdateFullNameIcon = false;
+  public editFullNameValue = this.authenticationService.currentUser.fullName;
 
   public uploadProfilePicture = (): void => {
     this.file.nativeElement.click();
@@ -51,5 +54,20 @@ export class MyProfileHeaderComponent {
   public getProfilePictureLink = (): string => {
     const baseUrl = environment.baseUrl;
     return `${baseUrl}/whstore/profile/${this.authenticationService.currentUser.profilePictureFileName}`;
+  }
+
+  public initializeEditFullNameModal = (): void => {
+    this.editFullNameValue = this.authenticationService.currentUser.fullName;
+  }
+
+  public editFullName = (): void => {
+    const editUserParameters = new EditUserParameters();
+    editUserParameters.fullName = this.editFullNameValue;
+    this.restUserService.editUser(editUserParameters).subscribe({
+      next: (): void => {
+        this.informationUpdated.emit();
+        this.refreshCurrentUser();
+      }
+    });
   }
 }

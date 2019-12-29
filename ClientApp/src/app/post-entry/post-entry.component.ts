@@ -1,3 +1,5 @@
+import { Router } from '@angular/router';
+import { AuthenticationService } from 'src/core/authentication/services/authentication.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { RestPostService } from '../../core/data-access/post/rest-post.service';
 import { PostDto } from '../models/Post/PostDto';
@@ -12,13 +14,15 @@ export class PostEntryComponent implements OnInit {
   @Input() post: PostDto;
   @Output() postWasDeleted: EventEmitter<any> = new EventEmitter();
   constructor(
-    private restPostService: RestPostService
+    private restPostService: RestPostService,
+    private authenticationService: AuthenticationService,
+    private router: Router
   ) { }
 
   likePost = (): void => {
     this.restPostService.likePost(this.post.id).subscribe(
       () => this.refreshPost()
-      );
+    );
   }
 
   dislikePost = (): void => {
@@ -38,12 +42,16 @@ export class PostEntryComponent implements OnInit {
       next: (post: PostDto): void => {
         this.post = post;
       }
-    })
+    });
   }
 
   public getProfilePictureLink = (): string => {
     const baseUrl = environment.baseUrl;
     return `${baseUrl}/whstore/profile/${this.post.owner.profilePictureFileName}`;
+  }
+
+  public goToProfile = (): void => {
+    this.router.navigate([`/profile/${this.post.owner.id}`]);
   }
 
   ngOnInit(): void {

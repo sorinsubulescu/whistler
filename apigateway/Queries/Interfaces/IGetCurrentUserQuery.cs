@@ -1,6 +1,6 @@
 namespace apigateway
 {
-    public interface IGetCurrentUserQuery : IQuery<UserDto>
+    public interface IGetUserQuery : IQuery<UserDto>
     {
     }
 }

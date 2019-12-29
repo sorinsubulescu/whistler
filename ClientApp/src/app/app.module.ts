@@ -1,4 +1,4 @@
-import { MyProfileHeaderComponent } from './my-profile-header/my-profile-header.component';
+import { ProfileHeaderComponent } from './profile-header/profile-header.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { StartupService } from './../core/startup/startup.service';
 import { startupServiceFactory } from './../core/startup/startup-service.factory';
@@ -34,7 +34,7 @@ import { AuthErrorInterceptor } from 'src/core/authentication/helpers/autherror.
       LoginComponent,
       RegisterComponent,
       ProfilePageComponent,
-      MyProfileHeaderComponent
+      ProfileHeaderComponent
    ],
    imports: [
       BrowserModule,

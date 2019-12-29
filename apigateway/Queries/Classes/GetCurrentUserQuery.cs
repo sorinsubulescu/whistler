@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 
 namespace apigateway
 {
-    public class GetCurrentUserQuery : IGetCurrentUserQuery
+    public class GetUserQuery : IGetUserQuery
     {
         private readonly string _userId;
         private readonly IUserProvider _userProvider;
 
-        public GetCurrentUserQuery(string userId, IUserProvider userProvider)
+        public GetUserQuery(string userId, IUserProvider userProvider)
         {
             _userId = userId ?? throw new ArgumentNullException(nameof(userId));
             _userProvider = userProvider ?? throw new ArgumentNullException(nameof(userProvider));

@@ -1,4 +1,4 @@
-import { AuthenticationService } from 'src/core/authentication/services/authentication.service';
+import { ActivatedRoute, Params } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { RestPostService } from 'src/core/data-access/post/rest-post.service';
 import { PostDto } from '../models/Post/PostDto';
@@ -12,16 +12,22 @@ import { GetPostsDto } from '../models/Post/GetPostsDto';
 export class ProfilePageComponent implements OnInit {
   constructor(
     private restPostService: RestPostService,
-    private authenticationService: AuthenticationService
+    private activatedRoute: ActivatedRoute
   ) { }
 
+  public userId: string;
   public postList: Array<PostDto>;
-  ngOnInit(): void {
-    this.fetchPosts();
+
+  public ngOnInit(): void {
+    this.activatedRoute.params.subscribe(
+      (params: Params) => {
+       this.userId = params['id'];
+       this.fetchPosts();
+    });
   }
 
   fetchPosts = (): void => {
-    this.restPostService.getPostsByUserId(this.authenticationService.currentUser.id).subscribe(
+    this.restPostService.getPostsByUserId(this.userId).subscribe(
       (getPostsDto: GetPostsDto) => {
 
         this.postList = getPostsDto.posts;

@@ -5,7 +5,7 @@ import { DebugElement } from '@angular/core';
 
 import { ProfilePageComponent } from './profile-page.component';
 
-describe('ProfilePageComponent', () => {
+describe('MyProfilePageComponent', () => {
   let component: ProfilePageComponent;
   let fixture: ComponentFixture<ProfilePageComponent>;
 

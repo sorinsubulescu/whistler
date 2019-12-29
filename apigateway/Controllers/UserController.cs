@@ -117,7 +117,17 @@ namespace apigateway
         {
             var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var userDto = await _queryFactory.GetCurrentUserQuery(userId).Execute(cancellationToken)
+            var userDto = await _queryFactory.GetUserQuery(userId).Execute(cancellationToken)
+                .ConfigureAwait(false);
+
+            return Ok(userDto);
+        }
+
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<UserDto>> GetUserById(string userId,
+            CancellationToken cancellationToken = default)
+        {
+            var userDto = await _queryFactory.GetUserQuery(userId).Execute(cancellationToken)
                 .ConfigureAwait(false);
 
             return Ok(userDto);

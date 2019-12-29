@@ -13,7 +13,7 @@
         <div class="dropdown-menu profile-menu-dropdown" aria-labelledby="dropdownMenuButton">
           <p class="profile-name">{{this.authenticationService.currentUser.fullName}}</p>
           <p class="profile-email">{{this.authenticationService.currentUser.email}}</p>
-          <div class="dropdown-item" routerLink="/profile/me">Profile</div>
+          <div class="dropdown-item" routerLink="/profile/{{this.authenticationService.currentUser.id}}">Profile</div>
           <div class="dropdown-item" (click)="logout()">Log Out</div>
         </div>
       </div>

@@ -53,6 +53,9 @@ export class RestUserService extends RestClient {
   getCurrentUser = (): Observable<UserDto> =>
     this.callEndpoint<UserDto>(() => this.get('api/user/me'))
 
+  getUserById = (userId: string): Observable<UserDto> =>
+    this.callEndpoint<UserDto>(() => this.get(`api/user/${userId}`))
+
   editProfilePicture = (formData: FormData): Observable<RestResponse> =>
     this.callEndpoint<RestResponse>(() =>
       this.put('api/user/profile_picture', formData)

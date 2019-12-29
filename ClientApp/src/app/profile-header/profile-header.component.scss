@@ -19,10 +19,6 @@
     margin-bottom: 20px;
 }
 
-.profile-picture-container:hover {
-    cursor: pointer;
-}
-
 .profile-picture {
     color: white;
     font-size: 80px;
@@ -37,8 +33,11 @@
     color: white;
     font-weight: 700;
     font-size: 25px;
-    cursor: pointer;
     width: fit-content;
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }
 
 .update-picture-info {

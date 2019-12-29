@@ -4,7 +4,7 @@ namespace apigateway
     {
         IGetPostsQuery GetPostsQuery();
 
-        IGetCurrentUserQuery GetCurrentUserQuery(string userId);
+        IGetUserQuery GetUserQuery(string userId);
 
         IGetPostsByUserIdQuery GetPostsByUserIdQuery(string userId);
 

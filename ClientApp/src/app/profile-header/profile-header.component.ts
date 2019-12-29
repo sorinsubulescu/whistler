@@ -1,23 +1,27 @@
-import { EditUserParameters } from './../models/User/EditUserParameters';
+import { EditUserParameters } from '../models/User/EditUserParameters';
 import { AuthenticationService } from 'src/core/authentication/services/authentication.service';
-import { Component, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, ViewChild, ElementRef, Output, EventEmitter, Input, OnInit, AfterViewInit } from '@angular/core';
 import { RestUserService } from 'src/core/data-access/user/rest-user.service';
 import { environment } from 'src/environments/environment';
 import { UserDto } from '../models/User/UserDto';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
-  selector: 'app-my-profile-header',
-  templateUrl: './my-profile-header.component.html',
-  styleUrls: ['./my-profile-header.component.scss']
+  selector: 'app-profile-header',
+  templateUrl: './profile-header.component.html',
+  styleUrls: ['./profile-header.component.scss']
 })
-export class MyProfileHeaderComponent {
-  @ViewChild('file', { static: true}) file: ElementRef;
+export class ProfileHeaderComponent implements OnInit {
+  @ViewChild('file', { static: false }) file: ElementRef;
   @Output() informationUpdated: EventEmitter<any> = new EventEmitter();
+  @Input() userId: string;
   constructor(
     public authenticationService: AuthenticationService,
     public restUserService: RestUserService
     ) { }
 
+  private _user: UserDto = new UserDto();
+  public user$: BehaviorSubject<UserDto> = new BehaviorSubject<UserDto>(this._user);
   public showUpdatePictureInfo = false;
   public showUpdateFullNameIcon = false;
   public editFullNameValue = this.authenticationService.currentUser.fullName;
@@ -47,13 +51,16 @@ export class MyProfileHeaderComponent {
     this.restUserService.getCurrentUser().subscribe({
         next: (userDto: UserDto): void => {
             this.authenticationService.currentUser = userDto;
+            this.user$.next(this.authenticationService.currentUser);
         }
     });
 }
 
   public getProfilePictureLink = (): string => {
     const baseUrl = environment.baseUrl;
-    return `${baseUrl}/whstore/profile/${this.authenticationService.currentUser.profilePictureFileName}`;
+    let user: UserDto;
+    this.user$.subscribe((userDto: UserDto) => user = userDto);
+    return `${baseUrl}/whstore/profile/${user.profilePictureFileName}`;
   }
 
   public initializeEditFullNameModal = (): void => {
@@ -69,5 +76,31 @@ export class MyProfileHeaderComponent {
         this.refreshCurrentUser();
       }
     });
+  }
+
+  public isCurrentUserPage = (): boolean => {
+    if (this.userId === this.authenticationService.currentUser.id) {
+      return true;
+    }
+
+    return false;
+  }
+
+  public ngOnInit(): void {
+    if (this.isCurrentUserPage()) {
+      this.user$.next(this.authenticationService.currentUser);
+    } else {
+      this.restUserService.getUserById(this.userId).subscribe({
+        next: (userDto: UserDto): void => {
+          this.user$.next(userDto);
+        }
+      });
+    }
+  }
+
+  public hasProfilePicture = (): boolean => {
+    let user: UserDto;
+    this.user$.subscribe((userDto: UserDto) => user = userDto);
+    return user.profilePictureFileName ? true : false;
   }
 }

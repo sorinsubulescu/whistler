@@ -1,3 +1,4 @@
+import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { HomeComponent } from './home/home.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -17,6 +18,11 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'profile/:id',
+    component: ProfilePageComponent,
     canActivate: [AuthGuard]
   },
   {

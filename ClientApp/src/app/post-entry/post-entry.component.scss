@@ -47,6 +47,7 @@
     color: white;
     vertical-align: top;
     font-weight: 700;
+    cursor: pointer;
 }
 
 .name-row {
@@ -59,4 +60,8 @@
     font-size: 40px;
     margin-right: 20px;
     color: white;
+    height: 40px;
+    width: 40px;
+    border-radius: 40px;
+    cursor: pointer;
 }

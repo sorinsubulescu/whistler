@@ -18,8 +18,17 @@ namespace apigateway
         public Task<bool> AddPost(Post post, CancellationToken cancellationToken = default) =>
             _database.InsertOne(post, CollectionName.Posts, cancellationToken);
 
+        public Task<Post> GetById(string postId, CancellationToken cancellationToken = default) =>
+            _database.GetOneByFilter(Builders<Post>.Filter.Eq(e => e.Id, postId), CollectionName.Posts,
+                cancellationToken: cancellationToken);
+
         public Task<IEnumerable<Post>> GetAll(CancellationToken cancellationToken = default) =>
             _database.GetAll<Post>(CollectionName.Posts, cancellationToken);
+
+        public Task<IEnumerable<Post>> GetAllByUserId(string userId, CancellationToken cancellationToken = default) =>
+            _database.GetAllByFilter(Builders<Post>.Filter.Eq(e => e.OwnerId, userId), CollectionName.Posts,
+                cancellationToken);
+
 
         public Task<bool> LikePost(string postId, CancellationToken cancellationToken = default) =>
             _database.UpdateOne(postId, Builders<Post>.Update.Inc(e => e.Likes, 1), CollectionName.Posts,

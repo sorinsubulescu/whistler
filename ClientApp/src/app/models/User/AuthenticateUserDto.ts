@@ -1,3 +1,5 @@
+import { UserDto } from './UserDto';
+
 export class EnumerateUsersDto extends Response {
     public entries: Array<AuthenticateUserDto>;
 
@@ -7,8 +9,7 @@ export class EnumerateUsersDto extends Response {
 }
 
 export class AuthenticateUserDto extends Response {
-    public fullName: string;
-    public email: string;
+    public currentUser: UserDto;
     public token: string;
     public refreshToken: string;
 

@@ -6,10 +6,7 @@ namespace apigateway
     public sealed class AuthenticateUserDto : AuthTokenDto
     {
         [DataMember]
-        public string FullName { get; set; }
-
-        [DataMember]
-        public string Email { get; set; }
+        public UserDto CurrentUser { get; set; }
 
         internal new ResultType Result { get; set; }
 

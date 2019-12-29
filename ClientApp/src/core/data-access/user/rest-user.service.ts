@@ -9,6 +9,8 @@ import { RestResponse } from 'src/app/models/Misc/RestResponse';
 import { RestClient } from '../RestClient';
 import { AuthenticationService } from 'src/core/authentication/services/authentication.service';
 import { LogoutUserParameters } from 'src/app/models/User/LogoutUserParameters';
+import { UserDto } from 'src/app/models/User/UserDto';
+import { EditUserParameters } from 'src/app/models/User/EditUserParameters';
 
 @Injectable({
   providedIn: 'root'
@@ -47,4 +49,18 @@ export class RestUserService extends RestClient {
     this.callEndpoint<RestResponse>(() =>
       this.post(`api/user/logout`, logoutUserParameters)
     )
+
+  getCurrentUser = (): Observable<UserDto> =>
+    this.callEndpoint<UserDto>(() => this.get('api/user/me'))
+
+  getUserById = (userId: string): Observable<UserDto> =>
+    this.callEndpoint<UserDto>(() => this.get(`api/user/${userId}`))
+
+  editProfilePicture = (formData: FormData): Observable<RestResponse> =>
+    this.callEndpoint<RestResponse>(() =>
+      this.put('api/user/profile_picture', formData)
+    )
+
+  editUser = (editUserParameters: EditUserParameters): Observable<RestResponse> =>
+    this.callEndpoint<RestResponse>(() => this.patch('api/user', editUserParameters))
 }

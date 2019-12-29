@@ -20,5 +20,7 @@ namespace apigateway
         public byte[] PasswordSalt { get; set; }
 
         public string Email { get; set; }
+
+        public string ProfilePictureFileName { get; set; }
     }
 }

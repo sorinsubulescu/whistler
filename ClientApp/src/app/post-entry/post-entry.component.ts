@@ -1,6 +1,9 @@
+import { Router } from '@angular/router';
+import { AuthenticationService } from 'src/core/authentication/services/authentication.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { RestPostService } from '../../core/data-access/post/rest-post.service';
 import { PostDto } from '../models/Post/PostDto';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-post-entry',
@@ -9,27 +12,46 @@ import { PostDto } from '../models/Post/PostDto';
 })
 export class PostEntryComponent implements OnInit {
   @Input() post: PostDto;
-  @Output() postStatusChanged: EventEmitter<any> = new EventEmitter();
+  @Output() postWasDeleted: EventEmitter<any> = new EventEmitter();
   constructor(
-    private restService: RestPostService
+    private restPostService: RestPostService,
+    private authenticationService: AuthenticationService,
+    private router: Router
   ) { }
 
   likePost = (): void => {
-    this.restService.likePost(this.post.id).subscribe(
-      () => this.postStatusChanged.emit()
-      );
+    this.restPostService.likePost(this.post.id).subscribe(
+      () => this.refreshPost()
+    );
   }
 
   dislikePost = (): void => {
-    this.restService.dislikePost(this.post.id).subscribe(
-      () => this.postStatusChanged.emit()
+    this.restPostService.dislikePost(this.post.id).subscribe(
+      () => this.refreshPost()
     );
   }
 
   deletePost = (): void => {
-    this.restService.deletePost(this.post.id).subscribe(
-      () => this.postStatusChanged.emit()
+    this.restPostService.deletePost(this.post.id).subscribe(
+      () => this.postWasDeleted.emit()
     );
+  }
+
+  private refreshPost = (): void => {
+    this.restPostService.getPostById(this.post.id).subscribe({
+      next: (post: PostDto): void => {
+        this.post = post;
+      }
+    });
+  }
+
+  public getProfilePictureLink = (): string => {
+    const baseUrl = environment.baseUrl;
+    return `${baseUrl}/whstore/profile/${this.post.owner.profilePictureFileName}`;
+  }
+
+  public goToProfile = (): void => {
+    this.router.navigate([`/profile/${this.post.owner.id}`]);
   }
 
   ngOnInit(): void {

@@ -1,7 +1,11 @@
 <div class="post-container">
   <div class="name-row">
-  <div><i class="user-avatar far fa-user-circle"></i><span class="owner-name">{{post.owner.name}}</span></div>
-  <div class="delete-button"><span (click)="deletePost()">❌</span></div>
+    <div>
+      <i class="user-avatar far fa-user-circle" *ngIf="!post.owner.profilePictureFileName" (click)="goToProfile()"></i>
+      <img class="user-avatar" *ngIf="post.owner.profilePictureFileName" src="{{getProfilePictureLink()}}" (click)="goToProfile()">
+      <span class="owner-name" (click)="goToProfile()">{{post.owner.fullName}}</span>
+    </div>
+    <div class="delete-button"><span (click)="deletePost()">❌</span></div>
   </div>
   <div class="message">{{post.message}}</div>
   <div class="likes">

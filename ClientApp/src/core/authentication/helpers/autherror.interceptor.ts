@@ -44,10 +44,8 @@ export class AuthErrorInterceptor implements HttpInterceptor {
                             return next.handle(req.clone({ setHeaders: { Authorization: `Bearer ${response.token}` } }));
                         }),
                         catchError((error: HttpErrorResponse) => {
-                            if (error.url.endsWith('refreshToken')) {
-                                this.authenticationService.removeUserCookies();
-                                this.router.navigate(['/login']);
-                            }
+                            this.authenticationService.removeUserCookies();
+                            this.router.navigate(['/login']);
                             this.isRefreshing = false;
                             return throwError(error);
                         })

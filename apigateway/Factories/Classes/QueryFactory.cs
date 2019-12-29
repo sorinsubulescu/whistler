@@ -14,5 +14,11 @@ namespace apigateway
         }
 
         public IGetPostsQuery GetPostsQuery() => new GetPostsQuery(_postProvider, _userProvider);
+
+        public IGetUserQuery GetUserQuery(string userId) => new GetUserQuery(userId, _userProvider);
+
+        public IGetPostsByUserIdQuery GetPostsByUserIdQuery(string userId) => new GetPostsByUserIdQuery(userId, _postProvider, _userProvider);
+
+        public IGetPostByIdQuery GetPostByIdQuery(string postId) => new GetPostByIdQuery(postId, _postProvider, _userProvider);
     }
 }

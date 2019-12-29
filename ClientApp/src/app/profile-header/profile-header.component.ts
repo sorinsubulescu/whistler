@@ -1,6 +1,6 @@
 import { EditUserParameters } from '../models/User/EditUserParameters';
 import { AuthenticationService } from 'src/core/authentication/services/authentication.service';
-import { Component, ViewChild, ElementRef, Output, EventEmitter, Input, OnInit, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, Output, EventEmitter, Input, OnInit, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { RestUserService } from 'src/core/data-access/user/rest-user.service';
 import { environment } from 'src/environments/environment';
 import { UserDto } from '../models/User/UserDto';
@@ -11,7 +11,7 @@ import { BehaviorSubject } from 'rxjs';
   templateUrl: './profile-header.component.html',
   styleUrls: ['./profile-header.component.scss']
 })
-export class ProfileHeaderComponent implements OnInit {
+export class ProfileHeaderComponent implements OnInit, OnChanges {
   @ViewChild('file', { static: false }) file: ElementRef;
   @Output() informationUpdated: EventEmitter<any> = new EventEmitter();
   @Input() userId: string;
@@ -96,6 +96,11 @@ export class ProfileHeaderComponent implements OnInit {
         }
       });
     }
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    this.userId = changes.userId.currentValue;
+    this.ngOnInit();
   }
 
   public hasProfilePicture = (): boolean => {

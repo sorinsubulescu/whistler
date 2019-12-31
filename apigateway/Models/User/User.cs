@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
@@ -22,5 +23,9 @@ namespace apigateway
         public string Email { get; set; }
 
         public string ProfilePictureFileName { get; set; }
+
+        public IEnumerable<string> FollowerUserIds { get; set; }
+
+        public IEnumerable<string> FollowingUserIds { get; set; }
     }
 }

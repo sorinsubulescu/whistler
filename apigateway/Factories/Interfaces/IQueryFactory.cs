@@ -9,5 +9,7 @@ namespace apigateway
         IGetPostsByUserIdQuery GetPostsByUserIdQuery(string userId);
 
         IGetPostByIdQuery GetPostByIdQuery(string postId);
+
+        IGetUserBriefInfoQuery GetUserBriefInfoQuery(string userId, string currentUserId);
     }
 }

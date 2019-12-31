@@ -90,3 +90,58 @@
     background-color: #c96567;
     border-color: #c96567;
 }
+
+.followers-stats-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.followers-counters-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    color: white;
+    align-items: center;
+}
+
+.following-count-container {
+    margin-right: 10px;
+}
+
+.followers-count {
+    font-weight: 700;
+    margin-right: 5px;
+}
+
+.followers-count-text {
+    color: rgba(white, 0.8);
+}
+
+.unfollow-button {
+    width: 100px;
+    border-radius: 0px;
+    background-color: #97a9bd;
+    border-color: #97a9bd;
+}
+
+.unfollow-button:hover {
+    background-color: #c96567;
+    border-color: #c96567;
+}
+
+.unfollow-button:hover span{
+    display: none;
+}
+
+.unfollow-button:hover::before {
+    content: "Unfollow";
+}
+
+.follow-button {
+    width: 100px;
+    border-radius: 0px;
+    background-color: #97a9bd;
+    border-color: #97a9bd;
+}

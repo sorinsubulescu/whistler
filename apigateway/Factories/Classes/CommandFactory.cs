@@ -51,5 +51,11 @@ namespace apigateway
 
         public IEditUserCommand EditUserCommand(EditUserParameters editUserParameters, string userId) =>
             new EditUserCommand(editUserParameters, userId, _userProvider);
+
+        public IFollowUserCommand FollowUserCommand(FollowUserParameters followUserParameters, string userId) =>
+            new FollowUserCommand(followUserParameters, userId, _userProvider);
+
+        public IUnfollowUserCommand UnfollowUserCommand(UnfollowUserParameters unfollowUserParameters, string userId) =>
+            new UnfollowUserCommand(unfollowUserParameters, userId, _userProvider);
     }
 }

@@ -23,5 +23,9 @@ namespace apigateway
         IEditProfilePictureCommand EditProfilePictureCommand(IFormFile file, string userId);
 
         IEditUserCommand EditUserCommand(EditUserParameters editUserParameters, string userId);
+
+        IFollowUserCommand FollowUserCommand(FollowUserParameters followUserParameters, string userId);
+
+        IUnfollowUserCommand UnfollowUserCommand(UnfollowUserParameters unfollowUserParameters, string userId);
     }
 }

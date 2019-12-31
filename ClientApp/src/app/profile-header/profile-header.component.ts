@@ -1,10 +1,13 @@
+import { FollowUserParameters } from './../models/User/FollowUserParameters';
+import { UserBriefInfoDto } from './../models/User/UserBriefInfoDto';
 import { EditUserParameters } from '../models/User/EditUserParameters';
 import { AuthenticationService } from 'src/core/authentication/services/authentication.service';
-import { Component, ViewChild, ElementRef, Output, EventEmitter, Input, OnInit, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, ViewChild, ElementRef, Output, EventEmitter, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { RestUserService } from 'src/core/data-access/user/rest-user.service';
 import { environment } from 'src/environments/environment';
 import { UserDto } from '../models/User/UserDto';
 import { BehaviorSubject } from 'rxjs';
+import { UnfollowUserParameters } from '../models/User/UnfollowUserParameters';
 
 @Component({
   selector: 'app-profile-header',
@@ -18,10 +21,13 @@ export class ProfileHeaderComponent implements OnInit, OnChanges {
   constructor(
     public authenticationService: AuthenticationService,
     public restUserService: RestUserService
-    ) { }
+  ) { }
 
   private _user: UserDto = new UserDto();
   public user$: BehaviorSubject<UserDto> = new BehaviorSubject<UserDto>(this._user);
+  private _userBriefInfo: UserBriefInfoDto = new UserBriefInfoDto();
+  public userBriefInfo$: BehaviorSubject<UserBriefInfoDto> = new BehaviorSubject<UserBriefInfoDto>(this._userBriefInfo);
+
   public showUpdatePictureInfo = false;
   public showUpdateFullNameIcon = false;
   public editFullNameValue = this.authenticationService.currentUser.fullName;
@@ -49,12 +55,20 @@ export class ProfileHeaderComponent implements OnInit, OnChanges {
 
   private refreshCurrentUser = (): void => {
     this.restUserService.getCurrentUser().subscribe({
-        next: (userDto: UserDto): void => {
-            this.authenticationService.currentUser = userDto;
-            this.user$.next(this.authenticationService.currentUser);
-        }
+      next: (userDto: UserDto): void => {
+        this.authenticationService.currentUser = userDto;
+        this.user$.next(this.authenticationService.currentUser);
+      }
     });
-}
+  }
+
+  private fetchUserBriefInfo = (): void => {
+    this.restUserService.getUserBriefInfo(this.userId).subscribe({
+      next: (userBriefInfoDto: UserBriefInfoDto): void => {
+        this.userBriefInfo$.next(userBriefInfoDto);
+      }
+    });
+  }
 
   public getProfilePictureLink = (): string => {
     const baseUrl = environment.baseUrl;
@@ -96,6 +110,8 @@ export class ProfileHeaderComponent implements OnInit, OnChanges {
         }
       });
     }
+
+    this.fetchUserBriefInfo();
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -107,5 +123,35 @@ export class ProfileHeaderComponent implements OnInit, OnChanges {
     let user: UserDto;
     this.user$.subscribe((userDto: UserDto) => user = userDto);
     return user.profilePictureFileName ? true : false;
+  }
+
+  public isUserFollowedByCurrentUser = (): boolean => {
+    let isUserFollowed: boolean;
+    this.userBriefInfo$.subscribe((userBriefInfo: UserBriefInfoDto) => isUserFollowed = userBriefInfo.isFollowedByMe);
+    return isUserFollowed;
+  }
+
+  public followUser = (): void => {
+    const followUserParameters: FollowUserParameters = {
+      userToFollowId: this.userId
+    };
+
+    this.restUserService.followUser(followUserParameters).subscribe({
+      next: (): void => {
+        this.fetchUserBriefInfo();
+      }
+    });
+  }
+
+  public unfollowUser = (): void => {
+    const unfollowUserParameters: UnfollowUserParameters = {
+      userToUnfollowId: this.userId
+    };
+
+    this.restUserService.unfollowUser(unfollowUserParameters).subscribe({
+      next: (): void => {
+        this.fetchUserBriefInfo();
+      }
+    });
   }
 }

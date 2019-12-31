@@ -170,5 +170,64 @@ namespace apigateway
                     throw new ArgumentOutOfRangeException();
             }
         }
+
+        [HttpPost("follow")]
+        public async Task<ActionResult> FollowUser(FollowUserParameters followUserParameters,
+            CancellationToken cancellationToken = default)
+        {
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var result = await _commandFactory.FollowUserCommand(followUserParameters, userId)
+                .Execute(cancellationToken).ConfigureAwait(false);
+
+            switch (result.Result)
+            {
+                case RestResponse.ResultType.Success:
+                    return Ok();
+                case RestResponse.ResultType.Error:
+                    return BadRequest();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        [HttpPost("unfollow")]
+        public async Task<ActionResult> UnfollowUser(UnfollowUserParameters unfollowUserParameters,
+            CancellationToken cancellationToken = default)
+        {
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var result = await _commandFactory.UnfollowUserCommand(unfollowUserParameters, userId)
+                .Execute(cancellationToken).ConfigureAwait(false);
+
+            switch (result.Result)
+            {
+                case RestResponse.ResultType.Success:
+                    return Ok();
+                case RestResponse.ResultType.Error:
+                    return BadRequest();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        [HttpGet("brief_info/{userId}")]
+        public async Task<ActionResult<UserBriefInfoDto>> GetUserBriefInfo(string userId, CancellationToken cancellationToken = default)
+        {
+            var currentUserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var userBriefInfoDto = await _queryFactory.GetUserBriefInfoQuery(userId, currentUserId).Execute(cancellationToken)
+                .ConfigureAwait(false);
+
+            switch (userBriefInfoDto.Result)
+            {
+                case RestResponse.ResultType.Success:
+                    return Ok(userBriefInfoDto);
+                case RestResponse.ResultType.Error:
+                    return BadRequest();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
     }
 }

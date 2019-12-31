@@ -1,14 +1,21 @@
 <div class="navbar-container">
-  <div class="navbar-row">
-    <div class="logo">
-      Whistler
+  <div class="row navbar-row">
+    <div class="col-lg-6 row-left">
+      <div class="logo" routerLink="/home">
+        Whistler
+      </div>
+      <div class="search-bar-container">
+        <app-search-bar></app-search-bar>
+      </div>
     </div>
-    <div class="navbar-row">
+    <div class="col-lg-6 row-right">
       <div class="home-button"><span routerLink="/home">Home</span></div>
       <div class="dropdown user-dropdown">
         <div class="top-bar-icon-bg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="far fa-user-circle profile-picture" *ngIf="!authenticationService.currentUser.profilePictureFileName"></i>
-          <img class="profile-picture" *ngIf="authenticationService.currentUser.profilePictureFileName" src="{{getProfilePictureLink()}}">
+          <i class="far fa-user-circle profile-picture"
+            *ngIf="!authenticationService.currentUser.profilePictureFileName"></i>
+          <img class="profile-picture" *ngIf="authenticationService.currentUser.profilePictureFileName"
+            src="{{getProfilePictureLink()}}">
         </div>
         <div class="dropdown-menu profile-menu-dropdown" aria-labelledby="dropdownMenuButton">
           <p class="profile-name">{{this.authenticationService.currentUser.fullName}}</p>

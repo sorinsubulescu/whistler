@@ -2,7 +2,7 @@ namespace apigateway
 {
     public interface IQueryFactory
     {
-        IGetPostsQuery GetPostsQuery();
+        IGetPostsQuery GetPostsQuery(string userId);
 
         IGetUserQuery GetUserQuery(string userId);
 

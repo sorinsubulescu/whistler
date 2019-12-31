@@ -13,7 +13,7 @@ namespace apigateway
             _userProvider = userProvider ?? throw new ArgumentNullException(nameof(userProvider));
         }
 
-        public IGetPostsQuery GetPostsQuery() => new GetPostsQuery(_postProvider, _userProvider);
+        public IGetPostsQuery GetPostsQuery(string userId) => new GetPostsQuery(userId, _postProvider, _userProvider);
 
         public IGetUserQuery GetUserQuery(string userId) => new GetUserQuery(userId, _userProvider);
 

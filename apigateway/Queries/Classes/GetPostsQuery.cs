@@ -8,18 +8,26 @@ namespace apigateway
 {
     public class GetPostsQuery : IGetPostsQuery
     {
+        private readonly string _userId;
         private readonly IPostProvider _postProvider;
         private readonly IUserProvider _userProvider;
 
-        public GetPostsQuery(IPostProvider postProvider, IUserProvider userProvider)
+        public GetPostsQuery(string userId, IPostProvider postProvider, IUserProvider userProvider)
         {
+            _userId = userId ?? throw new ArgumentNullException(nameof(userId));
             _postProvider = postProvider ?? throw new ArgumentNullException(nameof(postProvider));
             _userProvider = userProvider ?? throw new ArgumentNullException(nameof(userProvider));
         }
 
         public async Task<GetPostsDto> Execute(CancellationToken cancellationToken = default)
         {
-            var posts = (await _postProvider.GetAll(cancellationToken).ConfigureAwait(false)).ToList()
+            var currentUser = await _userProvider.GetById(_userId, cancellationToken).ConfigureAwait(false);
+
+            var followingUserIds = currentUser.FollowingUserIds.ToList();
+            followingUserIds.Add(currentUser.Id);
+
+            var posts = (await _postProvider.GetAllByUserIds(followingUserIds, cancellationToken)
+                    .ConfigureAwait(false)).ToList()
                 .OrderByDescending(e => e.DateCreated);
 
             var postsDto = new List<PostDto>();

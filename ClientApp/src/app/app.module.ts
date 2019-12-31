@@ -1,3 +1,4 @@
+import { SearchBarComponent } from './search-bar/search-bar.component';
 import { ProfileHeaderComponent } from './profile-header/profile-header.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { StartupService } from './../core/startup/startup.service';
@@ -34,7 +35,8 @@ import { AuthErrorInterceptor } from 'src/core/authentication/helpers/autherror.
       LoginComponent,
       RegisterComponent,
       ProfilePageComponent,
-      ProfileHeaderComponent
+      ProfileHeaderComponent,
+      SearchBarComponent
    ],
    imports: [
       BrowserModule,

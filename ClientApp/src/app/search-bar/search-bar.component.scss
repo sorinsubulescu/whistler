@@ -1,0 +1,31 @@
+.search-bar-container {
+    width: 100%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: 314455;
+}
+
+.search-icon {
+    margin-right: 10px;
+}
+
+.search-bar {
+    display: inline-block;
+    border: none;
+    width: 100%;
+    outline: none;
+    font-size: 18px;
+    color: 314455;
+    background-color: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.dropdown-menu {
+    width: 100%;
+    background-color: white;
+    color: 314455;
+}

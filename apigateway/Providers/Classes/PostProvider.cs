@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,6 +30,9 @@ namespace apigateway
             _database.GetAllByFilter(Builders<Post>.Filter.Eq(e => e.OwnerId, userId), CollectionName.Posts,
                 cancellationToken);
 
+        public Task<IEnumerable<Post>> GetAllByUserIds(IEnumerable<string> userIds, CancellationToken cancellationToken = default) =>
+            _database.GetAllByFilter(Builders<Post>.Filter.In(e => e.OwnerId, userIds), CollectionName.Posts,
+                cancellationToken);
 
         public Task<bool> LikePost(string postId, CancellationToken cancellationToken = default) =>
             _database.UpdateOne(postId, Builders<Post>.Update.Inc(e => e.Likes, 1), CollectionName.Posts,

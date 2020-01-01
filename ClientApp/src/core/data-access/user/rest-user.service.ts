@@ -1,3 +1,4 @@
+import { SearchUsersDto } from './../../../app/models/User/SearchUsersDto';
 import { UserBriefInfoDto } from './../../../app/models/User/UserBriefInfoDto';
 import { RegisterUserParameters } from './../../../app/models/User/RegisterUserParameters';
 import { AuthenticateUserParameters } from './../../../app/models/User/AuthenticateUserParameters';
@@ -75,4 +76,7 @@ export class RestUserService extends RestClient {
 
   unfollowUser = (unfollowUserParameters: UnfollowUserParameters): Observable<RestResponse> =>
     this.callEndpoint<RestResponse>(() => this.post('api/user/unfollow', unfollowUserParameters))
+
+  searchUsers = (searchTerm: string): Observable<SearchUsersDto> =>
+    this.callEndpoint<SearchUsersDto>(() => this.get(`api/user/search/${searchTerm}`))
 }

@@ -229,5 +229,23 @@ namespace apigateway
                     throw new ArgumentOutOfRangeException();
             }
         }
+
+        [HttpGet("search/{searchTerm}")]
+        public async Task<ActionResult<SearchUsersDto>> SearchUsers(string searchTerm,
+            CancellationToken cancellationToken = default)
+        {
+            var matchingUsers =
+                await _queryFactory.SearchUsersQuery(searchTerm).Execute(cancellationToken).ConfigureAwait(false);
+
+            switch (matchingUsers.Result)
+            {
+                case RestResponse.ResultType.Success:
+                    return Ok(matchingUsers);
+                case RestResponse.ResultType.Error:
+                    return BadRequest();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
     }
 }

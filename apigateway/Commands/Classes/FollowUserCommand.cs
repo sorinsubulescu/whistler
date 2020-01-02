@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,6 +27,13 @@ namespace apigateway
             if (userToFollow == null)
             {
                 return RestResponse.Error;
+            }
+
+            var user = await _userProvider.GetById(_userId, cancellationToken).ConfigureAwait(false);
+
+            if (user.FollowingUserIds.Any(e => e == userToFollow.Id))
+            {
+                return RestResponse.Error;;
             }
 
             await _userProvider

@@ -1,3 +1,6 @@
+import { UserDetailedInfo } from './../models/User/UserDetailedInfo';
+import { FollowersDto } from './../models/User/FollowersDto';
+import { FollowingUsersDto } from './../models/User/FollowingUsersDto';
 import { FollowUserParameters } from './../models/User/FollowUserParameters';
 import { UserBriefInfoDto } from './../models/User/UserBriefInfoDto';
 import { EditUserParameters } from '../models/User/EditUserParameters';
@@ -8,6 +11,7 @@ import { environment } from 'src/environments/environment';
 import { UserDto } from '../models/User/UserDto';
 import { BehaviorSubject } from 'rxjs';
 import { UnfollowUserParameters } from '../models/User/UnfollowUserParameters';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile-header',
@@ -20,13 +24,19 @@ export class ProfileHeaderComponent implements OnInit, OnChanges {
   @Input() userId: string;
   constructor(
     public authenticationService: AuthenticationService,
-    public restUserService: RestUserService
+    public restUserService: RestUserService,
+    public router: Router
   ) { }
 
   private _user: UserDto = new UserDto();
   public user$: BehaviorSubject<UserDto> = new BehaviorSubject<UserDto>(this._user);
   private _userBriefInfo: UserBriefInfoDto = new UserBriefInfoDto();
   public userBriefInfo$: BehaviorSubject<UserBriefInfoDto> = new BehaviorSubject<UserBriefInfoDto>(this._userBriefInfo);
+  private followingUsers: Array<UserDetailedInfo> = new Array<UserDetailedInfo>();
+  public followingUsers$: BehaviorSubject<Array<UserDetailedInfo>> = new BehaviorSubject<Array<UserDetailedInfo>>(this.followingUsers);
+  private followers: Array<UserDetailedInfo> = new Array<UserDetailedInfo>();
+  public followers$: BehaviorSubject<Array<UserDetailedInfo>> = new BehaviorSubject<Array<UserDetailedInfo>>(this.followers);
+
 
   public showUpdatePictureInfo = false;
   public showUpdateFullNameIcon = false;
@@ -74,6 +84,11 @@ export class ProfileHeaderComponent implements OnInit, OnChanges {
     const baseUrl = environment.baseUrl;
     let user: UserDto;
     this.user$.subscribe((userDto: UserDto) => user = userDto);
+    return `${baseUrl}/whstore/profile/${user.profilePictureFileName}`;
+  }
+
+  public getProfilePictureLinkForUser = (user: UserDto): string => {
+    const baseUrl = environment.baseUrl;
     return `${baseUrl}/whstore/profile/${user.profilePictureFileName}`;
   }
 
@@ -153,5 +168,87 @@ export class ProfileHeaderComponent implements OnInit, OnChanges {
         this.fetchUserBriefInfo();
       }
     });
+  }
+
+  public loadFollowingUsers = (): void => {
+    this.restUserService.getFollowingUsers(this.userId).subscribe({
+      next: (followingUsersDto: FollowingUsersDto): void => {
+        const followingUsers = new Array<UserDetailedInfo>();
+        followingUsersDto.followingUsers.forEach((user: UserDto) => {
+          this.restUserService.getUserBriefInfo(user.id).subscribe({
+            next: (userBriefInfoDto: UserBriefInfoDto): void => {
+              const userDetailedInfo: UserDetailedInfo = {
+                userDto: user,
+                userBriefInfoDto: userBriefInfoDto
+              };
+
+              followingUsers.push(userDetailedInfo);
+            }
+          });
+        });
+        this.followingUsers$.next(followingUsers);
+      }
+    });
+  }
+
+  public loadFollowers = (): void => {
+    this.restUserService.getFollowers(this.userId).subscribe({
+      next: (followersDto: FollowersDto): void => {
+        const followers = new Array<UserDetailedInfo>();
+        followersDto.followers.forEach((user: UserDto) => {
+          this.restUserService.getUserBriefInfo(user.id).subscribe({
+            next: (userBriefInfoDto: UserBriefInfoDto): void => {
+              const userDetailedInfo: UserDetailedInfo = {
+                userDto: user,
+                userBriefInfoDto: userBriefInfoDto
+              };
+
+              followers.push(userDetailedInfo);
+            }
+          });
+        });
+        this.followers$.next(followers);
+      }
+    });
+  }
+
+  public goToProfile = (user: UserDto): void => {
+    this.router.navigate([`/profile/${user.id}`]);
+  }
+
+  public followUserById = (userId: string, event: Event): void => {
+    event.stopPropagation();
+
+    const followUserParameters: FollowUserParameters = {
+      userToFollowId: userId
+    };
+
+    this.restUserService.followUser(followUserParameters).subscribe({
+      next: (): void => {
+        this.fetchUserBriefInfo();
+        this.loadFollowingUsers();
+        this.loadFollowers();
+      }
+    });
+  }
+
+  public unfollowUserById = (userId: string, event: Event): void => {
+    event.stopPropagation();
+
+    const unfollowUserParameters: UnfollowUserParameters = {
+      userToUnfollowId: userId
+    };
+
+    this.restUserService.unfollowUser(unfollowUserParameters).subscribe({
+      next: (): void => {
+        this.fetchUserBriefInfo();
+        this.loadFollowingUsers();
+        this.loadFollowers();
+      }
+    });
+  }
+
+  public isUserCurrentUser = (userId: string): boolean => {
+    return userId === this.authenticationService.currentUser.id;
   }
 }

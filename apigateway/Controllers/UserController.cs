@@ -247,5 +247,37 @@ namespace apigateway
                     throw new ArgumentOutOfRangeException();
             }
         }
+
+        [HttpGet("following/{userId}")]
+        public async Task<ActionResult<FollowingUsersDto>> GetFollowingUsers(string userId, CancellationToken cancellationToken = default)
+        {
+            var followingUsers = await _queryFactory.GetFollowingUsersQuery(userId).Execute(cancellationToken).ConfigureAwait(false);
+
+            switch (followingUsers.Result)
+            {
+                case RestResponse.ResultType.Success:
+                    return Ok(followingUsers);
+                case RestResponse.ResultType.Error:
+                    return BadRequest();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        [HttpGet("followers/{userId}")]
+        public async Task<ActionResult<FollowersDto>> GetFollowers(string userId, CancellationToken cancellationToken = default)
+        {
+            var followers = await _queryFactory.GetFollowersQuery(userId).Execute(cancellationToken).ConfigureAwait(false);
+
+            switch (followers.Result)
+            {
+                case RestResponse.ResultType.Success:
+                    return Ok(followers);
+                case RestResponse.ResultType.Error:
+                    return BadRequest();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
     }
 }

@@ -25,5 +25,9 @@ namespace apigateway
             new GetUserBriefInfoQuery(userId, currentUserId, _userProvider);
 
         public ISearchUsersQuery SearchUsersQuery(string searchTerm) => new SearchUsersQuery(searchTerm, _userProvider);
+
+        public IGetFollowingUsersQuery GetFollowingUsersQuery(string userId) => new GetFollowingUsersQuery(userId, _userProvider);
+
+        public IGetFollowersQuery GetFollowersQuery(string userId) => new GetFollowersQuery(userId, _userProvider);
     }
 }

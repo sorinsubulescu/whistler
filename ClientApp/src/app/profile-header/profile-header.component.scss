@@ -61,7 +61,7 @@
 }
 
 .modal-dialog {
-    top: 300px;
+    top: 200px;
     color: white;
 }
 
@@ -107,6 +107,11 @@
 
 .following-count-container {
     margin-right: 10px;
+    border-bottom: 1px solid transparent;
+}
+
+.followers-count-container {
+    border-bottom: 1px solid transparent;
 }
 
 .followers-count {
@@ -143,4 +148,43 @@
     border-radius: 0px;
     background-color: #97a9bd;
     border-color: #97a9bd;
+}
+
+.following-count-container:hover {
+    border-bottom: 1px solid white;
+    cursor: pointer;
+}
+
+.followers-count-container:hover {
+    border-bottom: 1px solid white;
+    cursor: pointer;
+}
+
+.user-list-modal-body {
+    height: 500px;
+    overflow-y: scroll;
+}
+
+.user-list-entry {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.user-list-entry:hover {
+    background-color: rgba(#c96567, 0.2);
+    cursor: pointer;
+}
+
+.user-avatar {
+    font-size: 40px;
+    margin-right: 20px;
+    color: white;
+    height: 40px;
+    width: 40px;
+    border-radius: 40px;
+}
+
+.modal-follow-button-container {
+    margin-left: auto;
 }

@@ -1,3 +1,4 @@
+import { FollowersDto } from './../../../app/models/User/FollowersDto';
 import { SearchUsersDto } from './../../../app/models/User/SearchUsersDto';
 import { UserBriefInfoDto } from './../../../app/models/User/UserBriefInfoDto';
 import { RegisterUserParameters } from './../../../app/models/User/RegisterUserParameters';
@@ -15,6 +16,7 @@ import { UserDto } from 'src/app/models/User/UserDto';
 import { EditUserParameters } from 'src/app/models/User/EditUserParameters';
 import { FollowUserParameters } from 'src/app/models/User/FollowUserParameters';
 import { UnfollowUserParameters } from 'src/app/models/User/UnfollowUserParameters';
+import { FollowingUsersDto } from 'src/app/models/User/FollowingUsersDto';
 
 @Injectable({
   providedIn: 'root'
@@ -79,4 +81,10 @@ export class RestUserService extends RestClient {
 
   searchUsers = (searchTerm: string): Observable<SearchUsersDto> =>
     this.callEndpoint<SearchUsersDto>(() => this.get(`api/user/search/${searchTerm}`))
+
+  getFollowingUsers = (userId: string): Observable<FollowingUsersDto> =>
+    this.callEndpoint<FollowingUsersDto>(() => this.get(`api/user/following/${userId}`))
+
+  getFollowers = (userId: string): Observable<FollowersDto> =>
+    this.callEndpoint<FollowersDto>(() => this.get(`api/user/followers/${userId}`))
 }

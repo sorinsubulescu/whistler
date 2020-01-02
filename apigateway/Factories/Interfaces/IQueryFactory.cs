@@ -13,5 +13,9 @@ namespace apigateway
         IGetUserBriefInfoQuery GetUserBriefInfoQuery(string userId, string currentUserId);
 
         ISearchUsersQuery SearchUsersQuery(string searchTerm);
+
+        IGetFollowingUsersQuery GetFollowingUsersQuery(string userId);
+
+        IGetFollowersQuery GetFollowersQuery(string userId);
     }
 }

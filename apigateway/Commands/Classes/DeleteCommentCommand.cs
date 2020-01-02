@@ -5,14 +5,17 @@ using System.Threading.Tasks;
 
 namespace apigateway
 {
-    public class LikePostCommand : ILikePostCommand
+    public class DeleteCommentCommand : IDeleteCommentCommand
     {
+        private readonly DeleteCommentParameters _deleteCommentParameters;
         private readonly string _postId;
         private readonly string _userId;
         private readonly IPostProvider _postProvider;
 
-        public LikePostCommand(string postId, string userId, IPostProvider postProvider)
+        public DeleteCommentCommand(DeleteCommentParameters deleteCommentParameters, string postId, string userId, IPostProvider postProvider)
         {
+            _deleteCommentParameters =
+                deleteCommentParameters ?? throw new ArgumentNullException(nameof(deleteCommentParameters));
             _postId = postId ?? throw new ArgumentNullException(nameof(postId));
             _userId = userId ?? throw new ArgumentNullException(nameof(userId));
             _postProvider = postProvider ?? throw new ArgumentNullException(nameof(postProvider));
@@ -22,23 +25,22 @@ namespace apigateway
         {
             var post = await _postProvider.GetById(_postId, cancellationToken).ConfigureAwait(false);
 
-            if (post == null)
+            var comment = post.Comments.Single(e => e.Id == _deleteCommentParameters.CommentId);
+
+            if (comment == null)
             {
                 return RestResponse.Error;
             }
 
-            var isPostAlreadyLikedByUser = post.LikedByUserIds.Any(e => e == _userId);
-
-            if (isPostAlreadyLikedByUser)
+            if (comment.OwnerId != _userId)
             {
                 return RestResponse.Error;
             }
 
-            await _postProvider.AddUserToLikedByList(_postId, _userId, cancellationToken).ConfigureAwait(false);
+            var deletedSuccessfully = await _postProvider
+                .DeleteComment(_postId, _deleteCommentParameters.CommentId, cancellationToken).ConfigureAwait(false);
 
-            await _postProvider.LikePost(_postId, cancellationToken).ConfigureAwait(false);
-
-            return RestResponse.Success;
+            return deletedSuccessfully ? RestResponse.Success : RestResponse.Error;
         }
     }
 }

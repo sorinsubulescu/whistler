@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,7 +24,9 @@ namespace apigateway
             {
                 Message = _addPostParameters.Message,
                 OwnerId = _userId,
-                DateCreated = DateTime.UtcNow
+                DateCreated = DateTime.UtcNow,
+                LikedByUserIds = new List<string>(),
+                Comments = new List<Comment>()
             };
 
             await _postProvider.AddPost(post, cancellationToken).ConfigureAwait(false);

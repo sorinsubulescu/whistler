@@ -24,7 +24,7 @@ namespace apigateway
 
             var user = await _userProvider.GetById(_userId, cancellationToken).ConfigureAwait(false);
 
-            var postsDto = posts.Select(post => new PostDto
+            var postsDto = await Task.WhenAll(posts.Select(async post => new PostDto
             {
                 Id = post.Id, Message = post.Message, LikeCount = post.Likes,
                 Owner = new UserDto
@@ -33,8 +33,21 @@ namespace apigateway
                     FullName = user.FullName,
                     Email = user.Email,
                     ProfilePictureFileName = user.ProfilePictureFileName
-                }
-            }).ToList();
+                },
+                LikedByUserIds = post.LikedByUserIds,
+                Comments = await Task.WhenAll(post.Comments.Select(async e =>
+                {
+                    var commentOwner = await _userProvider.GetById(e.OwnerId, cancellationToken).ConfigureAwait(false);
+                    return new CommentDto
+                    {
+                        Id = e.Id,
+                        Message = e.Message,
+                        OwnerId = commentOwner.Id,
+                        OwnerFullName = commentOwner.FullName,
+                        OwnerProfilePictureFileName = commentOwner.ProfilePictureFileName
+                    };
+                }))
+            }).ToList());
 
             return new GetPostsDto
             {

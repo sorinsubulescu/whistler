@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -13,8 +14,12 @@ namespace apigateway
 
         public int Likes { get; set; } = 0;
 
+        public IEnumerable<string> LikedByUserIds { get; set; }
+
         public string OwnerId { get; set; }
 
         public DateTime DateCreated { get; set; }
+
+        public IEnumerable<Comment> Comments { get; set; }
     }
 }

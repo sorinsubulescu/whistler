@@ -24,11 +24,11 @@ namespace apigateway
         public IAddPostCommand AddPostCommand(AddPostParameters addPostParameters, string userId) =>
             new AddPostCommand(addPostParameters, userId, _postProvider);
 
-        public ILikePostCommand LikePostCommand(string postId) => new LikePostCommand(postId, _postProvider);
+        public ILikePostCommand LikePostCommand(string postId, string userId) => new LikePostCommand(postId, userId, _postProvider);
 
-        public IDislikePostCommand DislikePostCommand(string postId) => new DislikePostCommand(postId, _postProvider);
+        public IDislikePostCommand DislikePostCommand(string postId, string userId) => new DislikePostCommand(postId, userId, _postProvider);
 
-        public IDeletePostCommand DeletePostCommand(string postId) => new DeletePostCommand(postId, _postProvider);
+        public IDeletePostCommand DeletePostCommand(string postId, string userId) => new DeletePostCommand(postId, userId, _postProvider);
 
         public IRegisterUserCommand RegisterUserCommand(
             RegisterUserParameters registerUserParameters)
@@ -57,5 +57,11 @@ namespace apigateway
 
         public IUnfollowUserCommand UnfollowUserCommand(UnfollowUserParameters unfollowUserParameters, string userId) =>
             new UnfollowUserCommand(unfollowUserParameters, userId, _userProvider);
+
+        public IAddCommentCommand AddCommentCommand(AddCommentParameters addCommentParameters, string postId,
+            string userId) => new AddCommentCommand(addCommentParameters, postId, userId, _postProvider);
+
+        public IDeleteCommentCommand DeleteCommentCommand(DeleteCommentParameters deleteCommentParameters, string postId,
+            string userId) => new DeleteCommentCommand(deleteCommentParameters, postId, userId, _postProvider);
     }
 }

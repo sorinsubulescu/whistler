@@ -38,11 +38,28 @@ namespace apigateway
             _database.UpdateOne(postId, Builders<Post>.Update.Inc(e => e.Likes, 1), CollectionName.Posts,
                 cancellationToken);
 
+        public Task<bool> AddUserToLikedByList(string postId, string userId,
+            CancellationToken cancellationToken = default) =>
+            _database.UpdateOne(postId, PostUpdateDefinition.AddLikedByUserId(userId), CollectionName.Posts, cancellationToken);
+
+        public Task<bool> RemoveUserFromLikedByList(string postId, string userId,
+            CancellationToken cancellationToken = default) =>
+            _database.UpdateOne(postId, PostUpdateDefinition.RemoveLikedByUserId(userId), CollectionName.Posts,
+                cancellationToken);
+
         public Task<bool> DislikePost(string postId, CancellationToken cancellationToken = default) =>
             _database.UpdateOneByFilter(postId, Builders<Post>.Filter.Gt(e => e.Likes, 0), Builders<Post>.Update.Inc(e => e.Likes, -1), CollectionName.Posts,
                 cancellationToken);
 
         public Task<bool> DeletePost(string postId, CancellationToken cancellationToken = default) =>
             _database.DeleteOne<Post>(postId, CollectionName.Posts, cancellationToken);
+
+        public Task<bool> AddComment(string postId, Comment comment, CancellationToken cancellationToken = default) =>
+            _database.UpdateOne(postId, PostUpdateDefinition.AddComment(comment), CollectionName.Posts,
+                cancellationToken);
+
+        public Task<bool> DeleteComment(string postId, string commentId, CancellationToken cancellationToken = default) =>
+        _database.UpdateOne(postId, PostUpdateDefinition.DeleteComment(commentId), CollectionName.Posts,
+                cancellationToken);
     }
 }

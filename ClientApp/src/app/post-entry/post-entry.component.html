@@ -2,15 +2,61 @@
   <div class="name-row">
     <div>
       <i class="user-avatar far fa-user-circle" *ngIf="!post.owner.profilePictureFileName" (click)="goToProfile()"></i>
-      <img class="user-avatar" *ngIf="post.owner.profilePictureFileName" src="{{getProfilePictureLink()}}" (click)="goToProfile()">
+      <img class="user-avatar" *ngIf="post.owner.profilePictureFileName" src="{{getProfilePictureLink()}}"
+        (click)="goToProfile()">
       <span class="owner-name" (click)="goToProfile()">{{post.owner.fullName}}</span>
     </div>
-    <div class="delete-button"><span (click)="deletePost()">❌</span></div>
+    <div class="dropdown options-dropdown" *ngIf="isCurrentUserPostOwner()">
+      <div class="top-bar-icon-bg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="dropdown-menu options-menu-dropdown" aria-labelledby="dropdownMenuButton">
+        <div class="dropdown-item" (click)="deletePost()">Delete</div>
+      </div>
+    </div>
   </div>
   <div class="message">{{post.message}}</div>
-  <div class="likes">
-    <button type="button" class="btn btn-success" (click)="likePost()">👍</button>
-    <span class="like-count">{{post.likeCount}}</span>
-    <button type="button" class="btn btn-danger" (click)="dislikePost()">👎</button>
+  <div class="like-count-container">
+    <div class="like-count">
+      <span class="like-count-number">{{post.likeCount}}</span> <span class="like-count-text">Likes</span>
+    </div>
+  </div>
+  <div class="like-button-container">
+    <button type="button" class="btn btn-primary like-button" *ngIf="!isPostLiked()" (click)="likePost()"><i
+        class="far fa-thumbs-up"></i> Like</button>
+    <button type="button" class="btn btn-primary like-button" *ngIf="isPostLiked()" (click)="dislikePost()"><i
+        class="fas fa-thumbs-up"></i> Liked</button>
+  </div>
+  <div class="comments-section-container">
+    <div class="add-comment-input-container">
+      <i class="comment-user-avatar no-margin-top cursor-default far fa-user-circle"
+        *ngIf="!authenticationService.currentUser.profilePictureFileName"></i>
+      <img class="comment-user-avatar no-margin-top cursor-default" *ngIf="authenticationService.currentUser.profilePictureFileName"
+        src="{{getCurrentUserProfilePictureLink()}}">
+      <form class="add-comment-form" (ngSubmit)="addComment()">
+        <input class="add-comment-input" type="text" placeholder="Write a comment" [(ngModel)]="commentToAdd"
+          [ngModelOptions]="{standalone: true}">
+      </form>
+    </div>
+    <div class="user-comments-container">
+      <div *ngFor="let comment of post.comments" class="comment-entry">
+        <i class="comment-user-avatar far fa-user-circle"
+          *ngIf="!comment.ownerProfilePictureFileName" (click)="goToProfileByUserId(comment.ownerId)"></i>
+        <img class="comment-user-avatar" *ngIf="comment.ownerProfilePictureFileName"
+          src="{{getUserProfilePictureLink(comment.ownerProfilePictureFileName)}}" (click)="goToProfileByUserId(comment.ownerId)">
+        <div class="comment-content-container">
+          <div class="comment-user-name" (click)="goToProfileByUserId(comment.ownerId)">{{comment.ownerFullName}}</div>
+          <div>{{comment.message}}</div>
+        </div>
+        <div class="dropdown comment-options-dropdown" *ngIf="isCurrentUserCommentOwner(comment)">
+          <div class="top-bar-icon-bg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-ellipsis-h comment-more-options"></i>
+          </div>
+          <div class="dropdown-menu options-menu-dropdown" aria-labelledby="dropdownMenuButton">
+            <div class="dropdown-item" (click)="deleteComment(comment)">Delete</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

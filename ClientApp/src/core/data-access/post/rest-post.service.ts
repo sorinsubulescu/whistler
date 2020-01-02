@@ -1,3 +1,6 @@
+import { DeleteCommentParameters } from './../../../app/models/Comment/DeleteCommentParameters';
+import { RestResponse } from 'src/app/models/Misc/RestResponse';
+import { AddCommentParameters } from './../../../app/models/Comment/AddCommentParameters';
 import { PostDto } from './../../../app/models/Post/PostDto';
 import { GetPostsDto } from './../../../app/models/Post/GetPostsDto';
 import { AddPostParameters } from '../../../app/models/Post/AddPostParameters';
@@ -58,4 +61,13 @@ export class RestPostService extends RestClient {
       `api/post/${postId}`
     ))
 
+  addComment = (addCommentParameters: AddCommentParameters, postId: string): Observable<Response> =>
+    this.callEndpoint<Response>(() => this.put(
+      `api/post/comment/${postId}`, addCommentParameters
+    ))
+
+  deleteComment = (deleteCommentParameters: DeleteCommentParameters, postId: string): Observable<Response> =>
+    this.callEndpoint<Response>(() => this.put(
+      `api/post/delete_comment/${postId}`, deleteCommentParameters
+    ))
 }

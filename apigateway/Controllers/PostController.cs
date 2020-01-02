@@ -67,25 +67,89 @@ namespace apigateway
         [HttpPut("like/{postId}")]
         public async Task<ActionResult> LikePost(string postId, CancellationToken cancellationToken = default)
         {
-            await _commandFactory.LikePostCommand(postId).Execute(cancellationToken).ConfigureAwait(false);
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            return Ok();
+            var response = await _commandFactory.LikePostCommand(postId, userId).Execute(cancellationToken)
+                .ConfigureAwait(false);
+
+            switch (response.Result)
+            {
+                case RestResponse.ResultType.Success:
+                    return Ok();
+                case RestResponse.ResultType.Error:
+                    return BadRequest();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         [HttpPut("dislike/{postId}")]
         public async Task<ActionResult> DislikePost(string postId, CancellationToken cancellationToken = default)
         {
-            await _commandFactory.DislikePostCommand(postId).Execute(cancellationToken).ConfigureAwait(false);
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            return Ok();
+            var response = await _commandFactory.DislikePostCommand(postId, userId).Execute(cancellationToken)
+                .ConfigureAwait(false);
+
+            switch (response.Result)
+            {
+                case RestResponse.ResultType.Success:
+                    return Ok();
+                case RestResponse.ResultType.Error:
+                    return BadRequest();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         [HttpDelete("{postId}")]
         public async Task<ActionResult> Delete(string postId, CancellationToken cancellationToken = default)
         {
-            await _commandFactory.DeletePostCommand(postId).Execute(cancellationToken).ConfigureAwait(false);
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            await _commandFactory.DeletePostCommand(postId, userId).Execute(cancellationToken).ConfigureAwait(false);
 
             return Ok();
+        }
+
+        [HttpPut("comment/{postId}")]
+        public async Task<ActionResult> AddComment([FromBody] AddCommentParameters addCommentParameters, string postId,
+            CancellationToken cancellationToken = default)
+        {
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var response = await _commandFactory.AddCommentCommand(addCommentParameters, postId, userId).Execute(cancellationToken)
+                .ConfigureAwait(false);
+
+            switch (response.Result)
+            {
+                case RestResponse.ResultType.Success:
+                    return Ok();
+                case RestResponse.ResultType.Error:
+                    return BadRequest();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        [HttpPut("delete_comment/{postId}")]
+        public async Task<ActionResult> DeleteComment([FromBody] DeleteCommentParameters deleteCommentParameters, string postId,
+            CancellationToken cancellationToken = default)
+        {
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var response = await _commandFactory.DeleteCommentCommand(deleteCommentParameters, postId, userId).Execute(cancellationToken)
+                .ConfigureAwait(false);
+
+            switch (response.Result)
+            {
+                case RestResponse.ResultType.Success:
+                    return Ok();
+                case RestResponse.ResultType.Error:
+                    return BadRequest();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

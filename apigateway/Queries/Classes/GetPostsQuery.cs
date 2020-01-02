@@ -47,7 +47,20 @@ namespace apigateway
                         FullName = user.FullName,
                         Email = user.Email,
                         ProfilePictureFileName = user.ProfilePictureFileName
-                    }
+                    },
+                    LikedByUserIds = post.LikedByUserIds,
+                    Comments = await Task.WhenAll(post.Comments.Select(async e =>
+                    {
+                        var commentOwner = await _userProvider.GetById(e.OwnerId, cancellationToken).ConfigureAwait(false);
+                        return new CommentDto
+                        {
+                            Id = e.Id,
+                            Message = e.Message,
+                            OwnerId = commentOwner.Id,
+                            OwnerFullName = commentOwner.FullName,
+                            OwnerProfilePictureFileName = commentOwner.ProfilePictureFileName
+                        };
+                    }))
                 });
             }
 

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace apigateway
 {
     public class PostDto
@@ -7,6 +9,10 @@ namespace apigateway
 
         public int LikeCount { get; set; }
 
+        public IEnumerable<string> LikedByUserIds { get; set; }
+
         public UserDto Owner { get; set; }
+
+        public IEnumerable<CommentDto> Comments { get; set; }
     }
 }

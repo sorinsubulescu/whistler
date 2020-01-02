@@ -1,0 +1,15 @@
+<div class="dropdown">
+  <div class="search-bar-container" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fa fa-search search-icon"></i>
+    <input type="text" #searchInput class="search-bar" placeholder="Find people" (keyup)="search($event.target.value)">
+  </div>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <div *ngIf="(matchedUsers$ | async).matchingUsers.length <= 0 && (searchTerm$ | async)" class="no-results-info">No matching results</div>
+    <div *ngIf="(matchedUsers$ | async).matchingUsers.length > 0">
+      <div *ngFor="let user of (matchedUsers$ | async).matchingUsers" class="search-result-item" (click)="goToProfile(user)">
+        <i class="user-avatar far fa-user-circle" *ngIf="!user.profilePictureFileName"></i>
+        <img class="user-avatar" *ngIf="user.profilePictureFileName" src="{{getProfilePictureLink(user)}}">
+        {{user.fullName}}
+      </div>
+    </div>
+  </div>

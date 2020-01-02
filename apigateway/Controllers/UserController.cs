@@ -170,5 +170,114 @@ namespace apigateway
                     throw new ArgumentOutOfRangeException();
             }
         }
+
+        [HttpPost("follow")]
+        public async Task<ActionResult> FollowUser(FollowUserParameters followUserParameters,
+            CancellationToken cancellationToken = default)
+        {
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var result = await _commandFactory.FollowUserCommand(followUserParameters, userId)
+                .Execute(cancellationToken).ConfigureAwait(false);
+
+            switch (result.Result)
+            {
+                case RestResponse.ResultType.Success:
+                    return Ok();
+                case RestResponse.ResultType.Error:
+                    return BadRequest();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        [HttpPost("unfollow")]
+        public async Task<ActionResult> UnfollowUser(UnfollowUserParameters unfollowUserParameters,
+            CancellationToken cancellationToken = default)
+        {
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var result = await _commandFactory.UnfollowUserCommand(unfollowUserParameters, userId)
+                .Execute(cancellationToken).ConfigureAwait(false);
+
+            switch (result.Result)
+            {
+                case RestResponse.ResultType.Success:
+                    return Ok();
+                case RestResponse.ResultType.Error:
+                    return BadRequest();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        [HttpGet("brief_info/{userId}")]
+        public async Task<ActionResult<UserBriefInfoDto>> GetUserBriefInfo(string userId, CancellationToken cancellationToken = default)
+        {
+            var currentUserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var userBriefInfoDto = await _queryFactory.GetUserBriefInfoQuery(userId, currentUserId).Execute(cancellationToken)
+                .ConfigureAwait(false);
+
+            switch (userBriefInfoDto.Result)
+            {
+                case RestResponse.ResultType.Success:
+                    return Ok(userBriefInfoDto);
+                case RestResponse.ResultType.Error:
+                    return BadRequest();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        [HttpGet("search/{searchTerm}")]
+        public async Task<ActionResult<SearchUsersDto>> SearchUsers(string searchTerm,
+            CancellationToken cancellationToken = default)
+        {
+            var matchingUsers =
+                await _queryFactory.SearchUsersQuery(searchTerm).Execute(cancellationToken).ConfigureAwait(false);
+
+            switch (matchingUsers.Result)
+            {
+                case RestResponse.ResultType.Success:
+                    return Ok(matchingUsers);
+                case RestResponse.ResultType.Error:
+                    return BadRequest();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        [HttpGet("following/{userId}")]
+        public async Task<ActionResult<FollowingUsersDto>> GetFollowingUsers(string userId, CancellationToken cancellationToken = default)
+        {
+            var followingUsers = await _queryFactory.GetFollowingUsersQuery(userId).Execute(cancellationToken).ConfigureAwait(false);
+
+            switch (followingUsers.Result)
+            {
+                case RestResponse.ResultType.Success:
+                    return Ok(followingUsers);
+                case RestResponse.ResultType.Error:
+                    return BadRequest();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        [HttpGet("followers/{userId}")]
+        public async Task<ActionResult<FollowersDto>> GetFollowers(string userId, CancellationToken cancellationToken = default)
+        {
+            var followers = await _queryFactory.GetFollowersQuery(userId).Execute(cancellationToken).ConfigureAwait(false);
+
+            switch (followers.Result)
+            {
+                case RestResponse.ResultType.Success:
+                    return Ok(followers);
+                case RestResponse.ResultType.Error:
+                    return BadRequest();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
     }
 }

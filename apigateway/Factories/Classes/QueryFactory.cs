@@ -13,12 +13,21 @@ namespace apigateway
             _userProvider = userProvider ?? throw new ArgumentNullException(nameof(userProvider));
         }
 
-        public IGetPostsQuery GetPostsQuery() => new GetPostsQuery(_postProvider, _userProvider);
+        public IGetPostsQuery GetPostsQuery(string userId) => new GetPostsQuery(userId, _postProvider, _userProvider);
 
         public IGetUserQuery GetUserQuery(string userId) => new GetUserQuery(userId, _userProvider);
 
         public IGetPostsByUserIdQuery GetPostsByUserIdQuery(string userId) => new GetPostsByUserIdQuery(userId, _postProvider, _userProvider);
 
         public IGetPostByIdQuery GetPostByIdQuery(string postId) => new GetPostByIdQuery(postId, _postProvider, _userProvider);
+
+        public IGetUserBriefInfoQuery GetUserBriefInfoQuery(string userId, string currentUserId) =>
+            new GetUserBriefInfoQuery(userId, currentUserId, _userProvider);
+
+        public ISearchUsersQuery SearchUsersQuery(string searchTerm) => new SearchUsersQuery(searchTerm, _userProvider);
+
+        public IGetFollowingUsersQuery GetFollowingUsersQuery(string userId) => new GetFollowingUsersQuery(userId, _userProvider);
+
+        public IGetFollowersQuery GetFollowersQuery(string userId) => new GetFollowersQuery(userId, _userProvider);
     }
 }

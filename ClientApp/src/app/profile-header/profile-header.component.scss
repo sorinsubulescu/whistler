@@ -1,7 +1,6 @@
 .header-container {
     margin: auto;
     border-radius: 1px;
-    width: 40%;
     height: auto;
     -webkit-box-shadow: 0px 4px 25px -8px rgba(0, 0, 0, 0.3);
     box-shadow: 0px 4px 25px -8px rgba(0, 0, 0, 0.3);
@@ -62,7 +61,7 @@
 }
 
 .modal-dialog {
-    top: 300px;
+    top: 200px;
     color: white;
 }
 
@@ -89,4 +88,103 @@
 .edit-button {
     background-color: #c96567;
     border-color: #c96567;
+}
+
+.followers-stats-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.followers-counters-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    color: white;
+    align-items: center;
+}
+
+.following-count-container {
+    margin-right: 10px;
+    border-bottom: 1px solid transparent;
+}
+
+.followers-count-container {
+    border-bottom: 1px solid transparent;
+}
+
+.followers-count {
+    font-weight: 700;
+    margin-right: 5px;
+}
+
+.followers-count-text {
+    color: rgba(white, 0.8);
+}
+
+.unfollow-button {
+    width: 100px;
+    border-radius: 0px;
+    background-color: #97a9bd;
+    border-color: #97a9bd;
+}
+
+.unfollow-button:hover {
+    background-color: #c96567;
+    border-color: #c96567;
+}
+
+.unfollow-button:hover span{
+    display: none;
+}
+
+.unfollow-button:hover::before {
+    content: "Unfollow";
+}
+
+.follow-button {
+    width: 100px;
+    border-radius: 0px;
+    background-color: #97a9bd;
+    border-color: #97a9bd;
+}
+
+.following-count-container:hover {
+    border-bottom: 1px solid white;
+    cursor: pointer;
+}
+
+.followers-count-container:hover {
+    border-bottom: 1px solid white;
+    cursor: pointer;
+}
+
+.user-list-modal-body {
+    height: 500px;
+    overflow-y: scroll;
+}
+
+.user-list-entry {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.user-list-entry:hover {
+    background-color: rgba(#c96567, 0.2);
+    cursor: pointer;
+}
+
+.user-avatar {
+    font-size: 40px;
+    margin-right: 20px;
+    color: white;
+    height: 40px;
+    width: 40px;
+    border-radius: 40px;
+}
+
+.modal-follow-button-container {
+    margin-left: auto;
 }

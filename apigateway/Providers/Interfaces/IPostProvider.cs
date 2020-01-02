@@ -14,6 +14,9 @@ namespace apigateway
 
         Task<IEnumerable<Post>> GetAllByUserId(string userId, CancellationToken cancellationToken = default);
 
+        Task<IEnumerable<Post>> GetAllByUserIds(IEnumerable<string> userIds,
+            CancellationToken cancellationToken = default);
+
         Task<bool> LikePost(string postId, CancellationToken cancellationToken = default);
 
         Task<bool> DislikePost(string postId, CancellationToken cancellationToken = default);

@@ -29,7 +29,10 @@ namespace apigateway
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-            services.AddControllers().AddNewtonsoftJson(opt => opt.SerializerSettings.NullValueHandling = NullValueHandling.Ignore);
+            services.AddControllers().AddNewtonsoftJson(opt =>
+            {
+                opt.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            });
 
             services.AddSingleton<IDatabase, MongoDatabase>();
             services.AddSingleton<IPostProvider, PostProvider>();

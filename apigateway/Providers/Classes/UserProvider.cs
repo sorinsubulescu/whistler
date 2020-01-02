@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
@@ -34,6 +35,13 @@ namespace apigateway
         public Task<bool> Update(string id, UpdateDefinition<User> updateDefinition,
             CancellationToken cancellationToken = default)
             => _database.UpdateOne(id, updateDefinition, CollectionName.Users, cancellationToken);
+
+        public Task<IEnumerable<User>> GetAllByFullNameSearchTerm(string searchTerm,
+            CancellationToken cancellationToken = default) =>
+            _database.GetAllByFilter(Builders<User>.Filter.Regex(e => e.FullName, ContainsRegex(searchTerm)),
+                CollectionName.Users, cancellationToken);
+
+        private static string ContainsRegex(string value) => $"/{value}/i";
 
         private static FilterDefinition<User> UserIdFilter(string userId) =>
             Builders<User>.Filter.Eq(e => e.Id, userId);

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
@@ -15,6 +16,9 @@ namespace apigateway
         Task<bool> Add(User user, CancellationToken cancellationToken = default);
 
         Task<bool> Update(string id, UpdateDefinition<User> updateDefinition,
+            CancellationToken cancellationToken = default);
+
+        Task<IEnumerable<User>> GetAllByFullNameSearchTerm(string searchTerm,
             CancellationToken cancellationToken = default);
 
         Task<long> CountAll(CancellationToken cancellationToken = default);

@@ -2,22 +2,34 @@
   <div class="header-container">
     <div class="profile-picture-container cursor-pointer" (mouseenter)="showUpdatePictureInfo=true"
       (mouseleave)="showUpdatePictureInfo=false" (click)="uploadProfilePicture()">
-      <i class="far fa-user-circle profile-picture"
-        *ngIf="!hasProfilePicture()"></i>
-      <img class="profile-picture" *ngIf="hasProfilePicture()"
-        src="{{getProfilePictureLink()}}">
+      <i class="far fa-user-circle profile-picture" *ngIf="!hasProfilePicture()"></i>
+      <img class="profile-picture" *ngIf="hasProfilePicture()" src="{{getProfilePictureLink()}}">
       <div class="update-picture-info" *ngIf="showUpdatePictureInfo">Edit</div>
       <input type="file" #file style="display: none" accept="image/*"
         (change)="profilePictureFileSelectionChanged($event)" />
     </div>
-    <div class="name cursor-pointer" (mouseenter)="showUpdateFullNameIcon=true" (mouseleave)="showUpdateFullNameIcon=false"
-      data-toggle="modal" data-target="#editFullNameModal" (click)="initializeEditFullNameModal()">
-      {{(user$ | async).fullName}}<i class="fa fa-edit full-name-edit-icon"
-        *ngIf="showUpdateFullNameIcon"></i>
+    <div class="name cursor-pointer" (mouseenter)="showUpdateFullNameIcon=true"
+      (mouseleave)="showUpdateFullNameIcon=false" data-toggle="modal" data-target="#editFullNameModal"
+      (click)="initializeEditFullNameModal()">
+      {{(user$ | async).fullName}}<i class="fa fa-edit full-name-edit-icon" *ngIf="showUpdateFullNameIcon"></i>
+    </div>
+    <div class="followers-stats-container">
+      <div class="followers-counters-container">
+        <div class="following-count-container" data-toggle="modal" data-target="#followingUsersModal"
+          (click)="loadFollowingUsers()">
+          <span class="followers-count">{{(userBriefInfo$ | async).followingCount}}</span>
+          <span class="followers-count-text">Following</span>
+        </div>
+        <div class="followers-count-container" data-toggle="modal" data-target="#followersModal"
+          (click)="loadFollowers()">
+          <span class="followers-count">{{(userBriefInfo$ | async).followersCount}}</span>
+          <span class="followers-count-text">Followers</span>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Modal -->
+  <!-- Edit Full Name Modal -->
   <div class="modal fade" id="editFullNameModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -43,12 +55,87 @@
 <div *ngIf="!isCurrentUserPage()">
   <div class="header-container">
     <div class="profile-picture-container">
-      <i class="far fa-user-circle profile-picture"
-        *ngIf="!hasProfilePicture()"></i>
-      <img class="profile-picture" *ngIf="hasProfilePicture()"
-        src="{{getProfilePictureLink()}}">
+      <i class="far fa-user-circle profile-picture" *ngIf="!hasProfilePicture()"></i>
+      <img class="profile-picture" *ngIf="hasProfilePicture()" src="{{getProfilePictureLink()}}">
     </div>
     <div class="name">
       {{(user$ | async).fullName}}
     </div>
+    <div class="followers-stats-container">
+      <div class="followers-counters-container">
+        <div class="following-count-container" data-toggle="modal" data-target="#followingUsersModal"
+          (click)="loadFollowingUsers()">
+          <span class="followers-count">{{(userBriefInfo$ | async).followingCount}}</span>
+          <span class="followers-count-text">Following</span>
+        </div>
+        <div class="followers-count-container" data-toggle="modal" data-target="#followersModal"
+          (click)="loadFollowers()">
+          <span class="followers-count">{{(userBriefInfo$ | async).followersCount}}</span>
+          <span class="followers-count-text">Followers</span>
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary follow-button" *ngIf="!isUserFollowedByCurrentUser()"
+        (click)="followUser()">Follow</button>
+      <button type="button" class="btn btn-primary unfollow-button" *ngIf="isUserFollowedByCurrentUser()"
+        (click)="unfollowUser()"><span>Following</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- Following Users Modal -->
+<div class="modal fade" id="followingUsersModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Following</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body user-list-modal-body">
+        <div *ngFor="let user of followingUsers$ | async" class="user-list-entry"
+          (click)="goToProfile(user.userDto)" data-dismiss="modal">
+          <i class="user-avatar far fa-user-circle" *ngIf="!user.userDto.profilePictureFileName"></i>
+          <img class="user-avatar" *ngIf="user.userDto.profilePictureFileName" src="{{getProfilePictureLinkForUser(user.userDto)}}">
+          {{user.userDto.fullName}}
+          <div class="modal-follow-button-container">
+            <button type="button" class="btn btn-primary follow-button" *ngIf="!user.userBriefInfoDto.isFollowedByMe && !isUserCurrentUser(user.userDto.id)"
+              (click)="followUserById(user.userDto.id, $event)">Follow</button>
+            <button type="button" class="btn btn-primary unfollow-button" *ngIf="user.userBriefInfoDto.isFollowedByMe && !isUserCurrentUser(user.userDto.id)"
+              (click)="unfollowUserById(user.userDto.id, $event)"><span>Following</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Followers Modal -->
+<div class="modal fade" id="followersModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Followers</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body user-list-modal-body">
+        <div *ngFor="let user of followers$ | async" class="user-list-entry" (click)="goToProfile(user.userDto)"
+          data-dismiss="modal">
+          <i class="user-avatar far fa-user-circle" *ngIf="!user.userDto.profilePictureFileName"></i>
+          <img class="user-avatar" *ngIf="user.userDto.profilePictureFileName" src="{{getProfilePictureLinkForUser(user.userDto)}}">
+          {{user.userDto.fullName}}
+          <div class="modal-follow-button-container">
+            <button type="button" class="btn btn-primary follow-button" *ngIf="!user.userBriefInfoDto.isFollowedByMe && !isUserCurrentUser(user.userDto.id)"
+              (click)="followUserById(user.userDto.id, $event)">Follow</button>
+            <button type="button" class="btn btn-primary unfollow-button" *ngIf="user.userBriefInfoDto.isFollowedByMe && !isUserCurrentUser(user.userDto.id)"
+              (click)="unfollowUserById(user.userDto.id, $event)"><span>Following</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

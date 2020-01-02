@@ -1,3 +1,6 @@
+import { FollowersDto } from './../../../app/models/User/FollowersDto';
+import { SearchUsersDto } from './../../../app/models/User/SearchUsersDto';
+import { UserBriefInfoDto } from './../../../app/models/User/UserBriefInfoDto';
 import { RegisterUserParameters } from './../../../app/models/User/RegisterUserParameters';
 import { AuthenticateUserParameters } from './../../../app/models/User/AuthenticateUserParameters';
 import { AuthenticateUserDto } from './../../../app/models/User/AuthenticateUserDto';
@@ -11,6 +14,9 @@ import { AuthenticationService } from 'src/core/authentication/services/authenti
 import { LogoutUserParameters } from 'src/app/models/User/LogoutUserParameters';
 import { UserDto } from 'src/app/models/User/UserDto';
 import { EditUserParameters } from 'src/app/models/User/EditUserParameters';
+import { FollowUserParameters } from 'src/app/models/User/FollowUserParameters';
+import { UnfollowUserParameters } from 'src/app/models/User/UnfollowUserParameters';
+import { FollowingUsersDto } from 'src/app/models/User/FollowingUsersDto';
 
 @Injectable({
   providedIn: 'root'
@@ -63,4 +69,22 @@ export class RestUserService extends RestClient {
 
   editUser = (editUserParameters: EditUserParameters): Observable<RestResponse> =>
     this.callEndpoint<RestResponse>(() => this.patch('api/user', editUserParameters))
+
+  getUserBriefInfo = (userId: string): Observable<UserBriefInfoDto> =>
+    this.callEndpoint<UserBriefInfoDto>(() => this.get(`api/user/brief_info/${userId}`))
+
+  followUser = (followUserParameters: FollowUserParameters): Observable<RestResponse> =>
+    this.callEndpoint<RestResponse>(() => this.post('api/user/follow', followUserParameters))
+
+  unfollowUser = (unfollowUserParameters: UnfollowUserParameters): Observable<RestResponse> =>
+    this.callEndpoint<RestResponse>(() => this.post('api/user/unfollow', unfollowUserParameters))
+
+  searchUsers = (searchTerm: string): Observable<SearchUsersDto> =>
+    this.callEndpoint<SearchUsersDto>(() => this.get(`api/user/search/${searchTerm}`))
+
+  getFollowingUsers = (userId: string): Observable<FollowingUsersDto> =>
+    this.callEndpoint<FollowingUsersDto>(() => this.get(`api/user/following/${userId}`))
+
+  getFollowers = (userId: string): Observable<FollowersDto> =>
+    this.callEndpoint<FollowersDto>(() => this.get(`api/user/followers/${userId}`))
 }

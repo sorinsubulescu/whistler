@@ -36,7 +36,6 @@ namespace apigateway
         public async Task<ActionResult<IEnumerable>> Get(CancellationToken cancellationToken = default)
         {
             var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
             var posts = await _queryFactory.GetPostsQuery(userId).Execute(cancellationToken).ConfigureAwait(false);
 
             return Ok(posts);

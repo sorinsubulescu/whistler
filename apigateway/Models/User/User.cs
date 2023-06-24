@@ -24,8 +24,8 @@ namespace apigateway
 
         public string ProfilePictureFileName { get; set; }
 
-        public IEnumerable<string> FollowerUserIds { get; set; }
+        public IEnumerable<string> FollowerUserIds { get; set; } = new List<string>();
 
-        public IEnumerable<string> FollowingUserIds { get; set; }
+        public IEnumerable<string> FollowingUserIds { get; set; } = new List<string>();
     }
 }

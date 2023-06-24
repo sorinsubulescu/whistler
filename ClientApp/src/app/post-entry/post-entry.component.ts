@@ -18,7 +18,7 @@ export class PostEntryComponent implements OnInit {
   @Output() postWasDeleted: EventEmitter<any> = new EventEmitter();
   constructor(
     private restPostService: RestPostService,
-    private authenticationService: AuthenticationService,
+    public authenticationService: AuthenticationService,
     private router: Router
   ) { }
 

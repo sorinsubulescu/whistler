@@ -14,9 +14,9 @@ import { environment } from 'src/environments/environment';
 })
 export class SearchBarComponent implements OnInit {
   @ViewChild('searchInput', { static: false }) searchInput: ElementRef;
-  private searchTerm$ = new Subject<string>();
+  public searchTerm$ = new Subject<string>();
   private _matchedUsers = new SearchUsersDto();
-  private matchedUsers$ = new BehaviorSubject<SearchUsersDto>(this._matchedUsers);
+  public matchedUsers$ = new BehaviorSubject<SearchUsersDto>(this._matchedUsers);
   private readonly SEARCH_DEBOUNCE_TIME = 400;
 
   constructor(

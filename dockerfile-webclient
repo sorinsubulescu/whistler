@@ -1,10 +1,10 @@
-FROM node:latest AS build
+FROM node:10.14.2 AS build
 
 WORKDIR /app
 
 COPY ./ClientApp/package.json /app/package.json
 RUN npm install
-RUN npm install -g @angular/cli
+RUN npm install -g @angular/cli@^8.0.0
 
 COPY ./ClientApp /app
 

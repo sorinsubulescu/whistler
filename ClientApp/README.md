@@ -1,27 +1,14 @@
-# Whister
+Adresa repository-ului: https://github.com/sorinsubulescu/whistler
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.3.
+### Instrucțiuni de compilare/rulare aplicatie
 
-## Development server
+Pentru a putea rula aplicația, este nevoie de a avea instalate Docker și utilitarul Docker Compose. Docker poate fi descărcat de pe pagina oficială: https://www.docker.com
+Instrucțiunile de instalare pentru utilitarul Docker Compose se află pe pagina următoare: https://docs.docker.com/compose/install/
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Odată instalate, puteți urmări instrucțiunile următoare pentru a porni aplicația:
 
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+1. Clonați codul sursă pe mașina locală
+ `git clone https://github.com/sorinsubulescu/whistler.git`
+ 2. În folderul rădăcină al repository-ului rulați comanda următoare pentru a compila și rula aplicația:
+`docker-compose up -d`
+3. Deschideți browserul și accesați aplicația la adresa: http://localhost

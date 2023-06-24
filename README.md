@@ -8,10 +8,10 @@ Instrucțiunile de instalare pentru utilitarul Docker Compose se află pe pagina
 
 Odată instalate, puteți urmări instrucțiunile următoare pentru a porni aplicația:
 
-1. Clonați codul sursă pe mașina locală
+1. Clonați codul sursă pe mașina locală  
  `git clone https://github.com/sorinsubulescu/whistler.git`
 
-2. În folderul rădăcină al repository-ului rulați comanda următoare pentru a compila și rula aplicația:
+2. În folderul rădăcină al repository-ului rulați comanda următoare pentru a compila și rula aplicația:  
 `docker-compose up -d`
 
 3. Deschideți browserul și accesați aplicația la adresa: http://localhost
